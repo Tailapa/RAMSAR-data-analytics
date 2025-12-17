@@ -20,3 +20,37 @@ bibliography: references.bib
 editor_options: 
   chunk_output_type: console
 ---
+
+## Data Source
+
+The foundational data for this analysis is sourced from the **Open Government Data (OGD) Platform India** catalog on **Ramsar Sites Details**.
+This dataset provides the geometric coordinates, area in hectares, and designation dates for the wetlands, allowing for a precise spatial and temporal analysis.
+
+```{r}
+#| label: load the dataset
+library(jsonlite)
+library(dplyr)
+
+# URL of the RAMSAR API
+api_url <- "https://indianwetlands.in/wp-content/themes/wetlands/restapi-ramsar.php"
+
+# Fetch and parse the data
+# Note: Sometimes government APIs require a 'User-Agent' header to allow access
+ramsar_json <- fromJSON(api_url)
+
+# Convert to a data frame
+# The API usually returns a nested list; we simplify it here
+ramsar_data <- as.data.frame(ramsar_json)
+
+```
+
+## Glimpse of the dataframe
+
+```{r}
+#| label: glimpse into the dataframe
+#| message: false
+#| warning: false
+glimpse(ramsar_data)
+```
+
+The dataset has **`r nrow(ramsar_data)`** rows and **`r ncol(ramsar_data)`** columns.
