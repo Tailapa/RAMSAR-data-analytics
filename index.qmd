@@ -1,4 +1,22 @@
 ---
-title: 'RAMSAR Wetlands Analysis'
-format: html
+title: "India’s RAMSAR Sites: A Geometric Analysis"
+subtitle: "Evaluating Wetland Conservation Trends and Ecological Data"
+author: "Shashank Venkatesh"
+date: last-modified
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 2
+    toc-location: left
+    code-fold: false
+    code-tools: true
+    embed-resources: true
+execute:
+  echo: true
+  warning: false
+  message: false
+bibliography: references.bib
+editor_options: 
+  chunk_output_type: console
 ---
