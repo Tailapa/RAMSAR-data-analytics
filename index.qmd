@@ -28,6 +28,9 @@ This dataset provides the geometric coordinates, area in hectares, and designati
 
 ```{r}
 #| label: load the dataset
+library(tidyverse)
+library(tidymodels)
+library(scales)
 library(jsonlite)
 library(dplyr)
 
@@ -54,3 +57,49 @@ glimpse(ramsar_data)
 ```
 
 The dataset has **`r nrow(ramsar_data)`** rows and **`r ncol(ramsar_data)`** columns.
+
+## Data Cleaning and Preparation
+
+to ensure all "geometric coordinates" and sizes are correctly typed.
+
+```{r}
+#| label: Converting chr strings to proper data types
+#| message: false
+#| warning: false
+# Convert character strings to numeric and date types
+ramsar_clean <- ramsar_data |>
+  mutate(
+    Area = as.numeric(Area),
+    Latitude = as.numeric(Latitude),
+    Longitude = as.numeric(Longitude),
+    Date = as.Date(DesignationDate),
+    Year = as.numeric(format(Date, "%Y"))
+  ) |>
+  arrange(Date) |>
+  mutate(cumulative_sites = row_number())
+```
+
+## The Acceleration of Conservation: A Temporal Growth Analysis
+
+### How has the rate of RAMSAR designations in India changed over the last three decades, particularly since the 2020s?
+
+to pinpoint the "inflection point" where India’s wetland conservation policy shifted into high gear.
+
+```{r}
+#| label: temporal growth analysis
+#| message: false
+#| warning: false
+ggplot(ramsar_clean, aes(x = Date, y = cumulative_sites)) +
+  #geom_area(fill = "#2A9D8F", alpha = 0.2) +
+  geom_line(color = "#2A9D8F", size = 0.5) +
+  geom_point(data = filter(ramsar_clean, Year >= 2020), 
+             color = "#E63946", size = 1) +
+  labs(
+    title = "The Exponential Rise of Indian RAMSAR Sites",
+    subtitle = "Cumulative designations from 1981 to December 2025",
+    x = "Year of Designation", y = "Total Number of Sites"
+  ) +
+  theme_minimal() +
+  theme(panel.grid.minor = element_blank(),
+        plot.title = element_text(face = "bold", size = 16, color = "#264653"))
+```
