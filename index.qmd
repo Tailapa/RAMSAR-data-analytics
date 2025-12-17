@@ -103,3 +103,72 @@ ggplot(ramsar_clean, aes(x = Date, y = cumulative_sites)) +
   theme(panel.grid.minor = element_blank(),
         plot.title = element_text(face = "bold", size = 16, color = "#264653"))
 ```
+
+## State-wise Distribution: The Pareto of Wetlands
+
+### Does a small number of states hold the majority of India's RAMSAR designations, or is it evenly distributed?
+
+Count sites by `StateName` and sort them in descending order.
+
+Highlights regional leaders in ecological preservation.
+
+```{r}
+#| label: State-wise Distribution
+
+ramsar_clean |>
+  count(StateName) |>
+  mutate(Highlight = ifelse(n >= 10, "Top Tier", "Other")) |>
+  ggplot(aes(x = n, y = reorder(StateName, n), fill = Highlight)) +
+  geom_col(width = 0.8) +
+  scale_fill_manual(values = c("Top Tier" = "#E63946", "Other" = "#2A9D8F")) +
+  labs(
+    title = "Regional Distribution of Wetlands",
+    subtitle = "Tamil Nadu leads the geometric distribution with 20 sites",
+    x = "Number of Designated Sites", y = NULL, fill = "Status"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none",
+        axis.text.y = element_text(size = 9, face = "bold"))
+```
+
+## The Size Spectrum: Are we protecting large basins or small habitats?
+
+### What is the distribution of wetland sizes (Area), and are there "mega-wetlands" that skew the national average?
+
+Transform the `Area` column to numeric and create a histogram or density plot.
+
+Shows if India focuses on massive ecological systems or smaller, niche biodiversity hotspots.
+
+```{r}
+#| label: Large basins v/s small habitats
+ggplot(ramsar_clean, aes(x = Area)) +
+  geom_histogram(fill = "#264653", color = "white", bins = 20) +
+  scale_x_log10(labels = comma) +
+  labs(
+    title = "Distribution of Wetland Area (Log Scale)",
+    subtitle = "Analysis of size variance from small reserves to massive basins",
+    x = "Area in Hectares (Log10)", y = "Frequency of Sites"
+  ) +
+  theme_minimal() +
+  theme(panel.grid.minor = element_blank())
+```
+
+### 4. Latitude & Area: The North-South Conservation Divide
+
+**Question:** Is there a relationship between geographical latitude and the size of designated wetlands?
+
+-   **Logic:** A scatter plot with `Latitude` on the X-axis and `Area` (log-scale) on the Y-axis.
+
+-   **Geometric Style:** Use transparent circles (`alpha = 0.5`) so that overlapping sites create darker "geometric nodes."
+
+-   **What it reveals:** Helps visualize if northern (Himalayan) wetlands tend to be larger or smaller than southern/peninsular ones.
+
+### 5. District-Level Granularity within Leading States
+
+**Question:** Within the states with the most RAMSAR sites, are the wetlands clustered in specific districts or spread across the state?
+
+-   **Logic:** Filter for a top state (like Tamil Nadu or Uttar Pradesh) and plot counts by `districtname`.
+
+-   **Geometric Style:** A treemap or a grouped bar chart.
+
+-   **What it reveals:** Identifies "ecological hubs" at a local government level, which is useful for management authority analysis.
