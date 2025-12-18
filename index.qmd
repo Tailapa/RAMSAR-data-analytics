@@ -186,7 +186,7 @@ ramsar_clean %>%
   filter(StateName == "Tamil Nadu") %>%
   count(districtname) %>%
   ggplot(aes(x = n, y = reorder(districtname, n))) +
-  geom_segment(aes(x = 0, xend = n, yend = districtname), color = "#CED4DA") +
+  geom_segment(aes(x = 0, xend = n, yend = districtname), color = "#2A9D8F") +
   geom_point(size = 4, color = "#E63946") +
   labs(
     title = "Local Concentration: Tamil Nadu",
