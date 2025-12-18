@@ -30,9 +30,13 @@ This dataset provides the geometric coordinates, area in hectares, and designati
 #| label: load the dataset
 library(tidyverse)
 library(tidymodels)
-library(scales)
+library(scales) # For formatting legend numbers
 library(jsonlite)
-library(dplyr)
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(ggrepel) # For non-overlapping labels
+library(plotly)
 
 # URL of the RAMSAR API
 api_url <- "https://indianwetlands.in/wp-content/themes/wetlands/restapi-ramsar.php"
@@ -77,6 +81,64 @@ ramsar_clean <- ramsar_data |>
   ) |>
   arrange(Date) |>
   mutate(cumulative_sites = row_number())
+```
+
+## Geographical Distribution of Wetlands in India
+
+```{r}
+#| label: Geographical Distribution of wetlands in India
+# 2. Get India's high-resolution boundary (sf format)
+india_map <- ne_countries(scale = "large", country = "India", returnclass = "sf")
+
+# 3. Convert our RAMSAR dataframe into a spatial object (sf)
+# We ensure Latitude/Longitude are numeric first
+ramsar_sf <- ramsar_clean |>
+  filter(!is.na(Latitude) & !is.na(Longitude)) |>
+  st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
+
+# 4. Plotting the Geometric Map
+ggplot() +
+  # Draw the base map of India with a minimalist geometric style
+  geom_sf(data = india_map, fill = "#F8F9FA", color = "#ADB5BD", size = 0.3) +
+  
+  # Plot wetlands as geometric bubbles
+  # Size is proportional to the Area; color is our signature Teal
+  geom_sf(data = ramsar_sf, 
+          aes(size = Area), 
+          color = "#2A9D8F", 
+          alpha = 0.6) +
+  
+  # Add labels only for the top 5 largest sites to keep it "geometric and clean"
+  geom_text_repel(data = ramsar_sf |> slice_max(Area, n = 5),
+                  aes(label = WetlandName, geometry = geometry),
+                  stat = "sf_coordinates",
+                  size = 3, 
+                  fontface = "bold",
+                  family = "sans",
+                  color = "#264653",
+                  box.padding = 0.5) +
+  
+  # Formatting the scales and legend
+  scale_size_continuous(range = c(1, 12), 
+                        labels = label_comma(),
+                        name = "Area (Hectares)") +
+  
+  # Apply a minimalist void theme
+  theme_void() +
+  labs(
+    title = "GEOSPATIAL ARCHITECTURE OF INDIA'S RAMSAR SITES",
+    subtitle = "Analysis of 96 internationally significant wetlands as of Dec 2025",
+    caption = "Data Source: Open Government Data (OGD) Platform India | Projection: WGS84"
+  ) +
+  
+  # Styling the typography
+  theme(
+    plot.title = element_text(family = "sans", face = "bold", size = 18, color = "#264653", hjust = 0.5),
+    plot.subtitle = element_text(family = "sans", size = 11, color = "#666666", hjust = 0.5, margin = margin(b = 20)),
+    legend.position = c(0.85, 0.2),
+    plot.background = element_rect(fill = "white", color = NA)
+  )
+
 ```
 
 ## The Acceleration of Conservation: A Temporal Growth Analysis
@@ -182,9 +244,9 @@ Identifies "ecological hubs" at a local government level, which is useful for ma
 
 ```{r}
 #| label: Identifying ecological hubs
-ramsar_clean %>%
-  filter(StateName == "Tamil Nadu") %>%
-  count(districtname) %>%
+ramsar_clean |>
+  filter(StateName == "Tamil Nadu") |>
+  count(districtname) |>
   ggplot(aes(x = n, y = reorder(districtname, n))) +
   geom_segment(aes(x = 0, xend = n, yend = districtname), color = "#2A9D8F") +
   geom_point(size = 4, color = "#E63946") +
