@@ -153,22 +153,46 @@ ggplot(ramsar_clean, aes(x = Area)) +
   theme(panel.grid.minor = element_blank())
 ```
 
-### 4. Latitude & Area: The North-South Conservation Divide
+## Latitude & Area: The North-South Conservation Divide
 
-**Question:** Is there a relationship between geographical latitude and the size of designated wetlands?
+### Is there a relationship between geographical latitude and the size of designated wetlands?
 
--   **Logic:** A scatter plot with `Latitude` on the X-axis and `Area` (log-scale) on the Y-axis.
+Helps visualize if northern (Himalayan) wetlands tend to be larger or smaller than southern/peninsular ones.
 
--   **Geometric Style:** Use transparent circles (`alpha = 0.5`) so that overlapping sites create darker "geometric nodes."
+```{r}
+#| label: geographical distribution
+ggplot(ramsar_clean, aes(x = Latitude, y = Area)) +
+  geom_point(aes(size = Area), color = "#2A9D8F", alpha = 0.5) +
+  geom_smooth(method = "lm", color = "#E63946", se = FALSE, linetype = "dashed") +
+  scale_y_log10(labels = comma) +
+  labs(
+    title = "Geospatial Area Trends",
+    subtitle = "Correlation between Latitude and Wetland Scale",
+    x = "Latitude (Degrees North)", y = "Area (Hectares)"
+  ) +
+  theme_minimal() +
+  guides(size = "none")
+```
 
--   **What it reveals:** Helps visualize if northern (Himalayan) wetlands tend to be larger or smaller than southern/peninsular ones.
+## District-Level Granularity within Leading States
 
-### 5. District-Level Granularity within Leading States
+### Within the states with the most RAMSAR sites, are the wetlands clustered in specific districts or spread across the state?
 
-**Question:** Within the states with the most RAMSAR sites, are the wetlands clustered in specific districts or spread across the state?
+Identifies "ecological hubs" at a local government level, which is useful for management authority analysis.
 
--   **Logic:** Filter for a top state (like Tamil Nadu or Uttar Pradesh) and plot counts by `districtname`.
-
--   **Geometric Style:** A treemap or a grouped bar chart.
-
--   **What it reveals:** Identifies "ecological hubs" at a local government level, which is useful for management authority analysis.
+```{r}
+#| label: Identifying ecological hubs
+ramsar_clean %>%
+  filter(StateName == "Tamil Nadu") %>%
+  count(districtname) %>%
+  ggplot(aes(x = n, y = reorder(districtname, n))) +
+  geom_segment(aes(x = 0, xend = n, yend = districtname), color = "#CED4DA") +
+  geom_point(size = 4, color = "#E63946") +
+  labs(
+    title = "Local Concentration: Tamil Nadu",
+    subtitle = "District-wise breakdown of sites in India's leading RAMSAR state",
+    x = "Number of Sites", y = NULL
+  ) +
+  theme_minimal() +
+  theme(panel.grid.major.y = element_blank())
+```
