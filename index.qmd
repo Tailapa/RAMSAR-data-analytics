@@ -13,7 +13,7 @@ format:
     code-tools: true
     embed-resources: true
 execute:
-  echo: true
+  echo: false
   warning: false
   message: false
 bibliography: references.bib
@@ -39,6 +39,8 @@ library(sf)
 library(mapindia)
 library(ggrepel) # For non-overlapping labels
 library(plotly)
+library(tidytext)
+library(patchwork) # To combine plots if needed
 
 # URL of the RAMSAR API
 api_url <- "https://indianwetlands.in/wp-content/themes/wetlands/restapi-ramsar.php"
@@ -295,4 +297,142 @@ ramsar_clean |>
   ) +
   theme_minimal() +
   theme(panel.grid.major.y = element_blank())
+```
+
+## The "Anthropogenic Shift": Natural vs. Human-Made
+
+This analysis reveals if India is increasingly relying on man-made reservoirs for international conservation status and determines if India’s conservation strategy is shifting toward protecting infrastructure-based biodiversity.
+
+Recent additions like **Siliserh Lake** (Rajasthan) and **Kopra Reservoir** (Chhattisgarh) are artificial ecosystems.
+
+### What percentage of India's RAMSAR network is comprised of human-made "Artificial" wetlands, and how does their average size compare to natural basins?
+
+```{r}
+#| label: Artificial wetlands
+# 1. Classification Logic
+ramsar_cat <- ramsar_clean |>
+  mutate(Type = case_when(
+    str_detect(WetlandName, "Reservoir|Dam|Barrage|Tank|Canal|Reserve") ~ "Human-Made / Managed",
+    TRUE ~ "Natural / Semi-Natural"
+  ))
+
+# 2. Visualization
+ggplot(ramsar_cat, aes(x = Type, y = Area, fill = Type)) +
+  geom_violin(alpha = 0.3, color = NA) +
+  geom_boxplot(width = 0.1, color = "#264653", outlier.shape = NA) +
+  geom_jitter(aes(color = Type), alpha = 0.5, width = 0.15) +
+  scale_y_log10(labels = label_comma()) +
+  scale_fill_manual(values = c("Human-Made / Managed" = "#E63946", "Natural / Semi-Natural" = "#2A9D8F")) +
+  scale_color_manual(values = c("Human-Made / Managed" = "#E63946", "Natural / Semi-Natural" = "#2A9D8F")) +
+  labs(title = "Scale Architecture: Natural vs. Managed Ecosystems",
+       subtitle = "Comparison of total area distribution (Hectares) across 96 sites",
+       x = NULL, y = "Area (Hectares, Log Scale)") +
+  theme_minimal() +
+  theme(legend.position = "none", plot.title = element_text(face = "bold"))
+```
+
+## Semantic Analysis of "Uniqueness": The Biodiversity Fingerprint
+
+(good for qualitative data analysis (categorical data))
+
+### What are the top three "Ecological Drivers" (e.g., Migratory Birds, Flood Control, Carbon Sequestration) that qualify an Indian site for RAMSAR status?
+
+We extract the "Keywords of Uniqueness" to see what makes a wetland internationally significant in the Indian context.
+
+```{r}
+#| label: analyse the uniqueness
+# 1. Text Mining
+uniqueness_words <- ramsar_clean |>
+  unnest_tokens(word, Uniqueness) |>
+  anti_join(stop_words) |>
+  filter(!word %in% c("wetland", "ramsar", "india", "sites", "lake")) |>
+  count(word, sort = TRUE) |>
+  head(15)
+
+# 2. Geometric Bar Plot
+ggplot(uniqueness_words, aes(x = n, y = reorder(word, n))) +
+  geom_col(fill = "#264653") +
+  geom_text(aes(label = n), hjust = -0.2, size = 3, color = "#264653") +
+  labs(title = "The Vocabulary of Conservation",
+       subtitle = "Top recurring terms in site uniqueness descriptions",
+       x = "Frequency of Mention", y = NULL) +
+  theme_minimal() +
+  theme(panel.grid.major.y = element_blank())
+```
+
+## The "Seasonality" of Global Recognition
+
+### Is there a "Policy Momentum" effect where sites are more likely to be designated around specific international events (e.g., World Wetlands Day in February or Independence Day)?
+
+Reveals if political timelines influence ecological milestones. A radial plot to see if designations cluster around specific months (Policy Momentum).
+
+```{r}
+#| label: Is there a seasonality in declaration?
+ramsar_months <- ramsar_clean |>
+  mutate(Month = month(Date, label = TRUE)) |>
+  count(Month)
+
+ggplot(ramsar_months, aes(x = Month, y = n, fill = n)) +
+  geom_col(show.legend = FALSE) +
+  coord_polar() +
+  scale_fill_gradient(low = "#8ECAE6", high = "#219EBC") +
+  labs(title = "The Annual Cycle of Designations",
+       subtitle = "Frequency of RAMSAR announcements by month",
+       x = NULL, y = NULL) +
+  theme_minimal() +
+  theme(axis.text.y = element_blank())
+```
+
+## Fragmented vs. Clustered Landscapes (Spatial Join)
+
+### Are Indian RAMSAR sites becoming "Ecological Corridors" (closely clustered) or "Isolated Oases"?
+
+Identify Hotspots (like the Tamil Nadu belt) versus Isolated sites (like Pala Wetland in Mizoram). This calculates how far each site is from its closest "Conservation Neighbor" to identify hubs.
+
+```{r}
+#| label: Ecological Corridors
+# 1. Calculate distances
+coords <- st_coordinates(ramsar_sf)
+dist_matrix <- st_distance(ramsar_sf)
+diag(dist_matrix) <- Inf # Ignore distance to self
+ramsar_clean$min_dist_km <- apply(dist_matrix, 1, min) / 1000
+
+# 2. Plotting the 'Isolation' index
+ggplot(ramsar_clean, aes(x = reorder(WetlandName, min_dist_km), y = min_dist_km)) +
+  geom_point(color = "#E63946") +
+  geom_segment(aes(xend = WetlandName, yend = 0), color = "#CED4DA", alpha = 0.5) +
+  coord_flip() +
+  labs(title = "Proximity and Ecological Corridors",
+       subtitle = "Distance to nearest RAMSAR site (km) - Top 20 most isolated sites",
+       x = NULL, y = "Distance to Nearest Neighbor (km)") +
+  theme_minimal() +
+  scale_x_discrete(breaks = ramsar_clean$WetlandName[seq(1, 96, by = 5)]) # Show every 5th for clarity
+```
+
+## Management Diversity & Scale
+
+The dataset names various authorities, from "Retired Academics" to "Forest Departments."
+
+### Does the type of `ManagementAuthority` correlate with the **Total Area** protected? Do institutional authorities manage larger "Mega-Wetlands" while local/academic bodies manage smaller "Niche Sanctuaries"?
+
+```{r}
+#| label: Visualizing if large basins are managed differently than smaller bird sanctuaries.
+# 1. Simplify Authority Categories
+ramsar_auth <- ramsar_clean |>
+  mutate(AuthType = case_when(
+    str_detect(ManagementAuthority, "Forest|Department|Wildlife") ~ "State Forest Dept",
+    str_detect(ManagementAuthority, "University|Academic|Retired") ~ "Academic/Expert",
+    TRUE ~ "Other/Local Authority"
+  ))
+
+# 2. Visualization
+ggplot(ramsar_auth, aes(x = AuthType, y = Area, color = AuthType)) +
+  geom_jitter(size = 3, alpha = 0.6, width = 0.2) +
+  scale_y_log10(labels = label_comma()) +
+  scale_color_manual(values = c("#264653", "#E63946", "#2A9D8F")) +
+  labs(title = "Institutional Scale and Oversight",
+       subtitle = "Wetland area managed by different authority types",
+       x = "Authority Category", y = "Area (Hectares)") +
+  theme_minimal() +
+  theme(legend.position = "none", axis.text.x = element_text(face = "bold"))
 ```
