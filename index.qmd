@@ -12,6 +12,9 @@ format:
     code-fold: false
     code-tools: false
     embed-resources: true
+    fig-height: 6  
+    fig-width: 6 
+    fig-align: center
 execute:
   echo: false
   warning: false
@@ -23,8 +26,7 @@ editor_options:
 
 ## Data Source
 
-The foundational data for this analysis is sourced from the **Open Government Data (OGD) Platform India** catalog on **Ramsar Sites Details**.
-This dataset provides the geometric coordinates, area in hectares, and designation dates for the wetlands, allowing for a precise spatial and temporal analysis.
+The foundational data for this analysis is sourced from the **Open Government Data (OGD) Platform India** catalog on **Ramsar Sites Details**. This dataset provides the geometric coordinates, area in hectares, and designation dates for the wetlands, allowing for a precise spatial and temporal analysis.
 
 ```{r}
 #| label: load the dataset
@@ -91,7 +93,7 @@ ramsar_clean <- ramsar_data |>
 ## Geographical Distribution of Wetlands in India
 
 ```{r}
-#| label: Geographical Distribution of wetlands in India
+#| label: Geographical Distribution of wetlands in India_2
 #| eval: false
 #| include: false
 # 2. Get India's high-resolution boundary (sf format)
@@ -106,7 +108,7 @@ ramsar_sf <- ramsar_clean |>
 # 4. Plotting the Geometric Map
 ggplot() +
   # Draw the base map of India with a minimalist geometric style
-  geom_sf(data = india_map, fill = "#F8F9FA", color = "#ADB5BD", size = 0.3) +
+  geom_sf(data = india_map, fill = "#F8F9FA", color = "#ADB5BD", size = 0.7) +
   
   # Plot wetlands as geometric bubbles
   # Size is proportional to the Area; color is our signature Teal
@@ -149,6 +151,11 @@ ggplot() +
 ```
 
 ```{r}
+#| label: Geographical Distribution of wetlands in India
+#| fig-height: 8  # Increases the vertical height of the output
+#| fig-width: 8   # Increases the horizontal width
+#| dpi: 300        # High resolution for geometric clarity
+
 # 1. Retrieve the official state boundaries as an sf object
 # This function is specifically designed to provide the official Indian map
 india_official <- map_india(regions = "states")
@@ -162,23 +169,25 @@ ramsar_sf <- ramsar_clean |>
 # 2. Plotting the correct geometry
 ggplot() +
   # Draw the base map with the official boundaries
-  geom_sf(data = india_official, fill = "#F8F9FA", color = "#ADB5BD", size = 0.3) +
+  geom_sf(data = india_official, fill = "#F8F9FA", color = "#ADB5BD", linewidth = 0.3,size = 0.4) +
   
   # Layer the RAMSAR sites as geometric nodes
   geom_sf(data = ramsar_sf, 
           aes(size = Area), 
           color = "#2A9D8F", 
           alpha = 0.6) +
+  coord_sf(expand = FALSE) +
   
   theme_void() +
   labs(
-    title = "OFFICIAL SPATIAL ARCHITECTURE: RAMSAR SITES",
-    subtitle = "Analysis using official Survey of India administrative boundaries",
+    title = "Geospatial Distribution of RAMSAR Sites",
+    subtitle = "40 Years of Policy: Analyzing 96 RAMSAR sites",
     caption = "Data Source: mapindia package & OGD India"
   ) +
   theme(
-    plot.title = element_text(face = "bold", size = 16, color = "#264653", hjust = 0.5),
-    legend.position = "bottom"
+    plot.title = element_text(face = "bold", size = 16, color = "#264653", hjust = 0.5, vjust = 4), plot.subtitle = element_text(size = 11, color = "#666666", hjust = 0.5, vjust = 4), 
+    legend.position = "bottom",
+    plot.margin = margin(10, 10, 10, 10) # Adds internal breathing room
   )
 ```
 
