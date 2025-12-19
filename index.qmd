@@ -469,7 +469,7 @@ The high frequency of terms like **"bird/birds/waterbirds" (appears 14 times),**
 
 ## The "Seasonality" of Global Recognition
 
-### Is there a "Policy Momentum" effect where sites are more likely to be designated around specific international events (e.g., World Wetlands Day in February or Independence Day)?
+### Is there a "policy window" where sites are more likely to be designated around specific international events (e.g., World Wetlands Day or Independence Day)?
 
 Reveals if political timelines influence ecological milestones. A radial plot to see if designations cluster around specific months (Policy Momentum).
 
@@ -477,7 +477,8 @@ Reveals if political timelines influence ecological milestones. A radial plot to
 #| label: seasonality-analysis
 ramsar_months <- ramsar_clean |>
   mutate(Month = month(Date, label = TRUE)) |>
-  count(Month)
+  count(Month) |>
+  arrange(desc(n))
 
 ggplot(ramsar_months, aes(x = Month, y = n, fill = n)) +
   geom_col(show.legend = FALSE) +
@@ -490,35 +491,100 @@ ggplot(ramsar_months, aes(x = Month, y = n, fill = n)) +
   theme(axis.text.y = element_blank())
 ```
 
-The radial chart shows that Ramsar designations are not distributed evenly throughout the year. There is a visible clustering in specific months (often aligning with **World Wetlands Day in February** or year-end policy cycles). This suggests that the "timing" of conservation is often tied to global environmental milestones and diplomatic windows.
+As can be inferred from the radial plot, the announcement of RAMSAR sites are not distributed evenly throughout the year. Rather, we can observe a nesting in a few months, like **`r ramsar_months$Month[1]`,** when **`r ramsar_months$n[1]`** sites were declared, and in **`r ramsar_months$Month[2]`** when **`r ramsar_months$n[2]`**, and in **`r ramsar_months$Month[3]`,** when again, **`r ramsar_months$n[3]`** sites were declared as RAMSAR sites. This aligns with prominent annual events such as **World Wetlands Day on February** **2nd** or **Independence day on August 15th**. For instance, on India's 75th Independence Day, Environment Minister Sri Bhupendra Yadav declared on social media pllatform 'X' that he was, "Elated to inform that 11 more Indian wetlands have got RAMSAR recognition. This takes our tally to 75 sites." \[1\] This shows that there is a window of announcement, often tied to global environmental milestones and diplomatic postures.
 
-## Fragmented vs. Clustered Landscapes (Spatial Join)
+## Fragmented vs. Clustered Landscapes
 
-### Are Indian RAMSAR sites becoming "Ecological Corridors" (closely clustered) or "Isolated Oases"?
+### Are Indian RAMSAR sites getting clustered or isolated?
 
 Identify Hotspots (like the Tamil Nadu belt) versus Isolated sites (like Pala Wetland in Mizoram). This calculates how far each site is from its closest "Conservation Neighbor" to identify hubs.
 
 ```{r}
-#| label: Ecological Corridors
-# 1. Calculate distances
-coords <- st_coordinates(ramsar_sf)
-dist_matrix <- st_distance(ramsar_sf)
-diag(dist_matrix) <- Inf # Ignore distance to self
-ramsar_clean$min_dist_km <- apply(dist_matrix, 1, min) / 1000
+#| label: Nearest Neighbor Identification
+#| fig-height: 10
+#| fig-width: 8
 
-# 2. Plotting the 'Isolation' index
-ggplot(ramsar_clean, aes(x = reorder(WetlandName, min_dist_km), y = min_dist_km)) +
-  geom_point(color = "#E63946") +
-  geom_segment(aes(xend = WetlandName, yend = 0), color = "#CED4DA", alpha = 0.5) +
+# --- 1: SPATIAL GEOMETRY CALCULATIONS ---
+# 1.1 Extract coordinates
+coords <- st_coordinates(ramsar_sf)
+
+# 1.2 Generate the Distance Matrix (Euclidean distance in meters)
+dist_matrix <- st_distance(ramsar_sf)
+
+# 1.3 Mask the diagonal (Self-distance) to find ACTUAL neighbors
+diag(dist_matrix) <- Inf 
+
+# 1.4 Calculate min distance and find neighbor indices
+# Convert meters to kilometers for research standard units
+ramsar_clean$min_dist_km <- apply(dist_matrix, 1, min) / 1000
+nearest_neighbor_index <- apply(dist_matrix, 1, which.min)
+
+# 1.5 Map Neighbor names back to the dataset
+ramsar_clean <- ramsar_clean |>
+  mutate(
+    Nearest_Neighbor = WetlandName[nearest_neighbor_index]
+  )
+
+
+# --- STEP 2: DATA PREPARATION FOR GEOMETRIC PLOT ---
+# We focus on the Top 20 most isolated sites to maintain design clarity
+isolated_top_20 <- ramsar_clean |>
+  slice_max(min_dist_km, n = 20) |>
+  mutate(
+    # Truncate long names for the Y-axis (Typography Management)
+    ShortName = ifelse(nchar(WetlandName) > 30, 
+                       paste0(substr(WetlandName, 1, 27), "..."), 
+                       WetlandName),
+    # Create a label for the plot that includes the neighbor name
+    Label_Full = paste0(ShortName, " (Near: ", Nearest_Neighbor, ")")
+  )
+
+
+# --- STEP 3: GEOMETRIC VECTOR VISUALIZATION ---
+ggplot(isolated_top_20, aes(x = reorder(ShortName, min_dist_km), y = min_dist_km)) +
+  
+  # The "Stem" (Geometric Vector)
+  geom_segment(aes(xend = reorder(ShortName, min_dist_km), yend = 0), 
+               color = "#CED4DA", 
+               linewidth = 1) +
+  
+  # The "Node" (Data Point) - Color intensity mapped to distance
+  geom_point(aes(color = min_dist_km), size = 4) +
+  
+  # Professional Color Scale: Teal (Connected) to Coral (Isolated)
+  scale_color_gradient(low = "#2A9D8F", high = "#E63946") +
+  
+  # Layout Flip for Readability
   coord_flip() +
-  labs(title = "Proximity and Ecological Corridors",
-       subtitle = "Distance to nearest RAMSAR site (km) - Top 20 most isolated sites",
-       x = NULL, y = "Distance to Nearest Neighbor (km)") +
+  
+  # Academic Labels
+  labs(
+    title = "ECOLOGICAL ISOLATION: TOP 20 VECTORS",
+    subtitle = "Quantifying fragmentation: Distance (km) to the nearest neighbor",
+    x = NULL, 
+    y = "Minimum Separation Distance (km)",
+    color = "Isolation (km)"
+  ) +
+  
+  # Geometric Theme Styling
   theme_minimal() +
-  scale_x_discrete(breaks = ramsar_clean$WetlandName[seq(1, 96, by = 5)]) # Show every 5th for clarity
+  theme(
+    text = element_text(family = "sans", color = "#264653"),
+    plot.title = element_text(face = "bold", size = 16),
+    axis.text.y = element_text(size = 9),
+    panel.grid.major.y = element_blank(), # Clean background
+    legend.position = "bottom"
+  )
+
+# --- STEP 4: OUTPUT DATA TABLE ---
+# This creates a summary table for your Quarto site
+isolation_summary <- ramsar_clean |>
+  select(WetlandName, Nearest_Neighbor, min_dist_km) |>
+  arrange(desc(min_dist_km))
+
 ```
 
-The "Isolation Index" identifies which sites are "Oases" and which are "Corridors." Sites in **Tamil Nadu and Punjab** show very low "distance to nearest neighbor," indicating they form a functional ecological network. In contrast, the high isolation of sites like **Pala Wetland (Mizoram)** highlights their role as unique, standalone biodiversity refuges that require specialized, independent management strategies.
+Sites like **Kolleru Lake (423 km** away from the nearest wetland), **Deepor Beel (268 km)**, and **Loktak Lake (268 km)** are what experts call **"Ecological Islands."** These sites are geographically lonely considering the nearest RAMSAR site. Hence, from a policy perspective, this necessitates localized, high-intensity management because they cannot rely on neighboring wetlands. At the other end of the spectrum, we have sites like **Chitrangudi and Kanjirankulam (2.07 km)** or **Nagi and Nakti (5.34 km)**. These are not just individual sites; they are **Conservation Complexes**. Geometrically, these nodes are so close they likely share the same migratory bird populations and water tables. This suggests that recent policy (post-2020) has shifted toward protecting "clusters," effectively creating larger "Safety Zones" rather than just isolated spots.
 
 ## Management Diversity & Scale
 
