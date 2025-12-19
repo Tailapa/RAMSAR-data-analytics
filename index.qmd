@@ -41,6 +41,8 @@ library(ggrepel) # For non-overlapping labels
 library(plotly)
 library(tidytext)
 library(patchwork) # To combine plots if needed
+library(ggwordcloud)
+
 
 # URL of the RAMSAR API
 api_url <- "https://indianwetlands.in/wp-content/themes/wetlands/restapi-ramsar.php"
@@ -409,23 +411,49 @@ ggplot(ramsar_cat, aes(x = Type, y = Area, fill = Type)) +
 
 The violin-and-box plot reveals that human-made reservoirs and barrages are now statistically comparable in importance to natural lakes. The **Human-Made / Managed** category shows a dense cluster of designations, proving that India is successfully leveraging its irrigation infrastructure (tanks and reservoirs) to provide international-standard habitats for migratory species.
 
-## Semantic Analysis of "Uniqueness": The Biodiversity Fingerprint
+## Semantic Analysis of Uniqueness: The Biodiversity Fingerprint
 
-(good for qualitative data analysis (categorical data))
-
-### What are the top three "Ecological Drivers" (e.g., Migratory Birds, Flood Control, Carbon Sequestration) that qualify an Indian site for RAMSAR status?
-
-We extract the "Keywords of Uniqueness" to see what makes a wetland internationally significant in the Indian context.
+A good approach to understand the uniqueness of India's RAMSAR sites is by performing Natural Language Processing (NLP) on the qualitative data (categorical data) contained in our dataset. This can be done by extracting and identifying specific keywords from the observation "Uniqueness" of the dataset that justify why these 96 sites were recognized by awarding them with international status.
 
 ```{r}
-#| label: analyse the uniqueness
-# 1. Text Mining
+#| label: Geometric Word Cloud
+#| echo: false
+
+# 1. Update the list with strictly lowercase terms
+exclude_words <- c("wetland", "ramsar", "india", "sites", "lake", "water", "ground")
+
+# 2. Text Mining
 uniqueness_words <- ramsar_clean |>
   unnest_tokens(word, Uniqueness) |>
   anti_join(stop_words) |>
-  filter(!word %in% c("wetland", "ramsar", "india", "sites", "lake")) |>
+  filter(!word %in% exclude_words) |>
   count(word, sort = TRUE) |>
   head(15)
+
+# 1. Generate the Geometric Word Cloud
+ggplot(uniqueness_words, aes(label = word, size = n, color = n)) +
+  # Using the 'area' shape for a more geometric, structured distribution
+  geom_text_wordcloud_area(area_corr = TRUE, shape = "square", rm_outside = TRUE) +
+  
+  # Scaling the text size geometrically
+  scale_size_area(max_size = 50) +
+  
+  # Applying Teal and Coral color palette
+  scale_color_gradient(low = "#2A9D8F", high = "#E63946") +
+  
+  # Minimalist formatting
+  theme_void() +
+  theme(
+    plot.background = element_rect(color = NA)
+  )
+```
+
+### What are the top three Ecological Drivers (e.g., Birds, Flood Control) that qualify an Indian site for RAMSAR status?
+
+We extract the keywords of Uniqueness Observation to see what makes a wetland internationally significant in the Indian context.
+
+```{r}
+#| label: analyse the uniqueness
 
 # 2. Geometric Bar Plot
 ggplot(uniqueness_words, aes(x = n, y = reorder(word, n))) +
@@ -438,7 +466,7 @@ ggplot(uniqueness_words, aes(x = n, y = reorder(word, n))) +
   theme(panel.grid.major.y = element_blank())
 ```
 
-The word frequency analysis of "Uniqueness" descriptions identifies **"Migratory," "Birds," and "Shelter"** as the core themes. This suggests that India’s Ramsar identity is primarily defined by the **Central Asian Flyway**. The "Biodiversity Fingerprint" of these sites is less about stagnant water and more about their role as vital transit hubs for global avian populations.
+The high frequency of terms like **"bird/birds/waterbirds" (appears 14 times),** **"sanctuary/reservoir" (appears 9 times)**, and **"migratory" (appears 4 times)**, confirms that India’s RAMSAR sites are primarily designated because of their role as bird sanctuaries in the Central Asian Flyway. This also signals that a large portion of India’s protected wetlands are irrigation reservoirs and designated sanctuaries, integrated into international conservation frameworks. Further, the appearance of words like **"freshwater" (5 times)** and **"endangered" (3 times)** indicates that the often used logic behind India's conservation framework of wetlands is threat-response, where the attention is focused on inland freshwater ecosystems (not just coastal) and their role in preventing the extinction of specific species.
 
 ## The "Seasonality" of Global Recognition
 
