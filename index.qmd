@@ -10,7 +10,7 @@ format:
     toc-depth: 2
     toc-location: left
     code-fold: false
-    code-tools: true
+    code-tools: false
     embed-resources: true
 execute:
   echo: false
