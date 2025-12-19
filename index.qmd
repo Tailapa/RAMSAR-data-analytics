@@ -1,6 +1,6 @@
 ---
-title: "India’s RAMSAR Sites: A Geometric Analysis"
-subtitle: "Evaluating Wetland Conservation Trends and Ecological Data"
+title: "Evaluating 40 Years of Wetland Conservation Policy (1981–2025)"
+subtitle: "A Spatio-Temporal EDA of India’s RAMSAR Sites"
 author: "Shashank Venkatesh"
 date: last-modified
 format:
@@ -25,7 +25,6 @@ editor_options:
 
 The foundational data for this analysis is sourced from the **Open Government Data (OGD) Platform India** catalog on **Ramsar Sites Details**.
 This dataset provides the geometric coordinates, area in hectares, and designation dates for the wetlands, allowing for a precise spatial and temporal analysis.
-#
 
 ```{r}
 #| label: load the dataset
