@@ -12,8 +12,8 @@ format:
     code-fold: false
     code-tools: false
     embed-resources: true
-    fig-height: 6  
-    fig-width: 6 
+    fig-height: 5  
+    fig-width: 5 
     fig-align: center
 execute:
   echo: false
@@ -24,9 +24,45 @@ editor_options:
   chunk_output_type: console
 ---
 
+::: {#policy_brief .callout style="simple"}
+## **Policy Brief: Wetland Governance (1981–2025)**
+
+India’s conservation strategy is driven by the **Amrit Dharohar scheme** and the **National Biodiversity Targets**, aiming to fulfill the **Kunming-Montreal Global Biodiversity Framework (GBF) "30x30" goals.**
+
+Recent judicial interventions, specifically ***M.K. Balakrishnan vs. Union of India***, have transformed wetlands from passive landscapes into protected legal entities, mandating rigorous spatial documentation.
+
+This analysis evaluates the **shift from massive basins to a distributed network of niche habitats**, ensuring regional climate resilience across the subcontinent.
+:::
+
+## Introduction
+
+Historically, wetlands were often viewed as **wastelands** or voids in the administrative landscape. However, over the last four decades, a fundamental shift in theperception of these spaces has occurred. Wetlands are now recognized as the **Kidneys** of the landscape—vital hydrological vectors that regulate carbon sequestration, flood mitigation, and biodiversity. The **RAMSAR Convention, signed in 1971**, provided the first global frmework for wetland protection. India’s accession to the convention in 1982 marked the beginning of a structured conservation timeline, transforming local water bodies into nodes of international significance.
+
+Wetlands are no longer peripheral to India’s development agenda; they are central to its climate resilience. As of 2025, India has expanded its network to **96 RAMSAR sites** (totaling over 1.5 million hectares), making it the leader in South Asia for protected wetland density. This exercise is particularly timely due to:
+
+1.  **The Amrit Dharohar Scheme:** Announced by the Government of India to promote the "wise use" of RAMSAR sites through community-led conservation and eco-tourism.
+
+2.  **International Commitments:** Under the **Kunming-Montreal Global Biodiversity Framework (GBF)**, India is committed to the "30x30" target—protecting 30% of its land and water by 2030. Wetlands are the most efficient "units" to meet these targets due to their high carbon density.
+
+3.  **Prominent Reports:** The **State of World's Wetlands** and India's own **National Wetland Decadal Change Atlas** highlight that while site numbers are increasing, the quality of "Regional Nodes" faces pressure from urban expansion.
+
+This analysis evaluates the **Spatio-Temporal Efficiency** of 40 years of policy. While the number of sites has exploded recently, our research identifies anchor hubs in conservation—where 45% of the protected area is concentrated in just 3% of the sites. The rationale for this study is further bolstered by a strengthening judicial framework. Landmark rulings, such as the **Supreme Court’s directions in the *M.K. Balakrishnan vs. Union of India* case**, have mandated the mapping and protection of over 200,000 wetlands nationwide. The **Wetlands (Conservation and Management) Rules, 2017**, shifted the "Administrative Geometry" toward State Wetland Authorities, making local-level data analysis more critical than ever.
+
+## **Research Objective**
+
+By analyzing the **Size Spectrum** and **Designation Timeline**, this exercise seeks to answer a critical question: *Has India’s policy evolved from protecting "Mega-Basins" to a more resilient, distributed network of "Micro-Habitats"?* Understanding this shift is essential for predicting the future trajectory of India's environmental architecture.
+
 ## Data Source
 
-The foundational data for this analysis is sourced from the **Open Government Data (OGD) Platform India** catalog on **Ramsar Sites Details**. This dataset provides the geometric coordinates, area in hectares, and designation dates for the wetlands, allowing for a precise spatial and temporal analysis.
+The foundational data for this analysis is sourced from the **Open Government Data (OGD) Platform India** which has a catalog on **Ramsar Sites**. This dataset provides the geometric coordinates, area in hectares, and designation dates for the wetlands, allowing for a precise spatial and temporal analysis.
+
+::: {.callout-note appearance="simple"}
+## Data Accessibility
+
+The dataset for this analysis is sourced from the **Open Government Data (OGD) Platform India**.
+
+[Download Dataset](https://www.data.gov.in/catalog/ramsar-sites-details){.btn .btn-outline-primary .btn-sm role="button"}
+:::
 
 ```{r}
 #| label: load the dataset
@@ -35,14 +71,15 @@ library(tidymodels)
 library(scales) # For formatting legend numbers
 library(jsonlite)
 library(sf)
-#library(rnaturalearth) # Error in Indian map with wrong administrative boundaries
-#library(rnaturalearthdata) #
 library(mapindia)
 library(ggrepel) # For non-overlapping labels
 library(plotly)
 library(tidytext)
 library(patchwork) # To combine plots if needed
 library(ggwordcloud)
+
+#library(rnaturalearth) # Error in Indian map with wrong administrative boundaries
+#library(rnaturalearthdata) #
 
 
 # URL of the RAMSAR API
@@ -71,7 +108,7 @@ The dataset has **`r nrow(ramsar_data)`** rows and **`r ncol(ramsar_data)`** col
 
 ## Data Cleaning and Preparation
 
-to ensure all "geometric coordinates" and sizes are correctly typed.
+The dataset on RAMSAR wetlands downloaded from OGD is a json file (not structured), and all the observations are stored in character data type. This is not ideal for Exploratory Data Analysis (EDA), which requires a structured dataset. Hence, we need to clean the data by mutating the observations into appropriate data types that will make it easier to analyse.
 
 ```{r}
 #| label: Converting chr strings to proper data types
@@ -152,8 +189,8 @@ ggplot() +
 
 ```{r}
 #| label: Geographical Distribution of wetlands in India
-#| fig-height: 8  # Increases the vertical height of the output
-#| fig-width: 8   # Increases the horizontal width
+#| fig-height: 7  # Increases the vertical height of the output
+#| fig-width: 7   # Increases the horizontal width
 #| dpi: 300        # High resolution for geometric clarity
 
 # 1. Retrieve the official state boundaries as an sf object
@@ -176,6 +213,7 @@ ggplot() +
           aes(size = Area), 
           color = "#2A9D8F", 
           alpha = 0.6) +
+  scale_size_continuous(range = c(2, 12), name = "Area (sq. km)") +
   coord_sf(expand = FALSE) +
   
   theme_void() +
@@ -258,13 +296,9 @@ ggplot(ramsar_phases, aes(x = Phase, y = n, fill = Phase)) +
 
 As the plot confirms, before 2020 (The Legacy Era), we only had 37 RAMSAR sites. This represents nearly 40 years of gradual identification and designation since India joined the convention in 1982. However, post-2020 (The Modern Era), we can see that 59 additional sites were designated as RAMSAR sites, which forms **61% of India’s total RAMSAR sites were declared in just the last 5 years.** This sudden surge indicates a shift in environmental priority, where the administrative speed of protecting wetlands has tripled compared to the previous four decades.
 
-## State-wise Distribution: The Pareto of Wetlands
+## State-wise Distribution of Wetlands
 
 ### Does a small number of states hold the majority of India's RAMSAR designations, or is it evenly distributed?
-
-Count sites by `StateName` and sort them in descending order.
-
-Highlights regional leaders in ecological preservation.
 
 ```{r}
 #| label: State-wise Distribution
@@ -319,12 +353,10 @@ The bar plot confirms a disparity in wetland distribution. **Tamil Nadu** leads 
 
 ### What is the distribution of wetland sizes (Area), and are there "mega-wetlands" that skew the national average?
 
-Transform the `Area` column to numeric and create a histogram or density plot.
-
-Shows if India focuses on massive ecological systems or smaller, niche biodiversity hotspots.
-
 ```{r}
 #| label: Large basins v/s small habitats
+#| eval: false
+#| include: false
 ggplot(ramsar_clean, aes(x = Area)) +
   geom_histogram(fill = "#264653", color = "white", bins = 20) +
   scale_x_log10(labels = comma) +
@@ -335,13 +367,149 @@ ggplot(ramsar_clean, aes(x = Area)) +
   ) +
   theme_minimal() +
   theme(panel.grid.minor = element_blank())
+
+
 ```
+
+```{r}
+#| label: calculate-size-spectrum
+#| echo: false
+#| fig-height: 6
+#| fig-width: 9
+
+# 1. Define the geometric brackets using 'cut'
+size_summary <- ramsar_clean |>
+  mutate(
+    Size_Bracket = cut(Area, 
+                       breaks = c(0, 10, 100, 1000, 10000, 100000, Inf),
+                       labels = c("< 10", "10–100", "100–1,000", "1,000–10,000", "10k–100k", "> 100k"),
+                       right = FALSE)
+  ) |>
+  group_by(Size_Bracket) |>
+  summarise(Count = n()) |>
+  mutate(Percentage = round((Count / sum(Count)) * 100, 1))
+
+
+
+ggplot(size_summary, aes(x = Size_Bracket, y = Count, fill = Size_Bracket)) +
+  # Draw clean geometric bars
+  geom_bar(stat = "identity", width = 0.7, color = "white", linewidth = 0.5) +
+  
+  # Add text labels on top of bars
+  geom_text(aes(label = Count), vjust = -0.5, size = 5, fontface = "bold", color = "#264653") +
+  
+  # Professional Color Palette (Teal to Coral)
+  scale_fill_manual(values = c("#2A9D8F", "#8AB17D", "#E9C46A", "#F4A261", "#E76F51", "#E63946")) +
+  
+  ylim(0,40) +
+  
+  theme_minimal() +
+  labs(
+    title = "THE SIZE SPECTRUM",
+    subtitle = "Analysis of 96 RAMSAR sites by Area Bracket (Hectares)",
+    x = "Area Bracket (Ha)", y = "Number of Sites",
+    fill = "Size Category"
+  ) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(face = "bold", size = 16, color = "#264653", hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.text = element_text(size = 11, color = "#264653"),
+    panel.grid.major.x = element_blank()
+  )
+```
+
+The histogram analysis shows a **log-normal distribution** (skewed toward the smaller and medium sizes) indicating a shift in India's wetland protection architrcture from broad landscape protection to targeted biodiversity conservation. Most sites fall within the **1,000 to 10,000-hectare range.** However, the presence of sites on the extreme right of the log scale indicates mega-wetlands that serve as critical national ecological anchors, while the smaller peaks represent specialized bird sanctuaries or niche habitats.
+
+**The "Mid-Range" Dominance (The 100–1,000 Hectare)**
+
+Nearly **39%** of all Indian RAMSAR sites fall into the 100–1,000 hectare range. This suggests that India’s conservation framework is optimized for medium-sized water bodies. These are often large enough to support significant migratory bird populations but small enough to be managed under specific state-level administrative boundaries.
+
+**The Mega-Wetlands are rare**
+
+Only **3.1%** (3 sites) exceed 100,000 hectares. In a 40-year policy evaluation, we can consider them as legacy sites. For example, wetland ecosystems like the Sundarbans. Their low count isn't a failure of policy, but rather a reflection of the geographic reality: there are very few ecosystems of this magnitude in the country. They act as the **National Anchors** of the network.
+
+**The Rise of Small Habitats (10–100 Hectares)**
+
+With **15.6%** of sites being relatively small (\< 100 ha), there is clear evidence of **Targeted Biodiversity Conservation**. In recent years (2020–2025), policy has shifted toward identifying "Micro-Nodes," sites that may be small in area but are critical for migratory paths like the Central Asian Flyway. For example, **Kazhuveli Bird Sanctuary in Tamilnadu.**
+
+*The conservation architecture of India's RAMSAR sites indicate a shift from broad 'Landscape Protection' to 'Targeted Biodiversity Conservation.' While the early decades focused on securing massive basins (\>100k ha), the recent designations are defined by the proliferation of mid-sized (100–1,000 ha) and micro-sites (\<100 ha), emphasizing a more granular and inclusive approach to wetland management.*
+
+## 3 vs 93: The Anchor Sites
+
+```{r}
+#| label: area-concentration-analysis
+#| echo: false
+
+# 1. Sort by area and calculate cumulative share
+area_dist <- ramsar_clean |>
+  arrange(desc(Area)) |>
+  mutate(
+    cum_area = cumsum(Area),
+    total_area = sum(Area),
+    cum_perc = (cum_area / total_area) * 100,
+    rank = row_number()
+  )
+
+# 2. Extract specific stats for the Top 3 vs the Rest
+top_3_stats <- area_dist |> 
+  filter(rank <= 3) |> 
+  summarise(
+    Count = n(),
+    Share_of_Total_Area = max(cum_perc)
+  )
+
+# 1. Prepare the comparison data
+comparison_df <- ramsar_clean |>
+  arrange(desc(Area)) |>
+  mutate(Category = ifelse(row_number() <= 3, "3 sites", "93 sites")) |>
+  group_by(Category) |>
+  summarise(Total_Area = sum(Area)) |>
+  mutate(
+    percentage = Total_Area / sum(Total_Area),
+    label = paste0(Category, "\n", comma(round(Total_Area)), " ha\n(", round(percentage * 100, 1), "%)")
+  )
+
+# 2. Plotting the Geometric Donut
+ggplot(comparison_df, aes(x = 2, y = percentage, fill = Category)) +
+  # The "Ring" vector
+  geom_bar(stat = "identity", width = 1, color = "white", linewidth = 2) +
+  coord_polar(theta = "y") +
+  
+  # Create the "Donut" hole (Inner Radius)
+  xlim(0.5, 2.5) + 
+  
+  # Theme Colors (Coral for Anchors, Teal for Nodes)
+  scale_fill_manual(values = c("3 sites" = "#E63946", "93 sites" = "#2A9D8F")) +
+  
+  # Styling and Labels
+  theme_void() +
+  labs(
+    title = "THE ANCHOR WETLANDS",
+    subtitle = "Areal breakdown of India's 40-year RAMSAR footprint",
+    caption = "3.1% of sites vs 96.9% of sites"
+  ) +
+  # Overlaying the Data Labels
+  geom_text(aes(label = label), 
+            position = position_stack(vjust = 0.5), 
+            color = "black", 
+            fontface = "bold", 
+            size = 4) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14, color = "#264653", hjust = 0.5),
+    plot.subtitle = element_text(size = 12, color = "#666666", hjust = 0.5, margin = margin(b = 20)),
+    plot.caption = element_text(size = 10, hjust = 0.5),
+    legend.position = "none" # Labels are inside the chart
+  )
+```
+
+The most crucial finding of this EDA is the extreme concentration of protected acreage in just three locations - `r area_dist$WetlandName[1]`, `r area_dist$WetlandName[2]` and `r area_dist$WetlandName[3]` . These **3 sites** (3.1% of the total Ramsar sites) command nearly **half (44.9%)** of the entire national RAMSAR footprint. With **690,750 hectares** concentrated in these hubs, they serve as the primary Carbon sinks and hydrological regulators for the country. This anchors them as the most crucial hubs in India's Ramsar sites conservation framework and hence these sites warrant special and focused attention. The remaining **93 sites** represent **847,207 hectares**, averaging only about 9,100 hectares per site. While these sites are individually smaller, they act as spokes of the wetland protection network since they provide vital connectivity across different climatic zones, bird flyways, and state borders. Overall, while the Hubs provide the scale and act as national ecological anchors, the Spokes provide the resilience by ensuring that if one region faces a drought or ecological crisis, other nodes in the network can still support migratory species. This **dual-track strategy** of protecting massive hubs while expanding a dense network of small spokes is the highlight of India's modern conservation framework.
 
 ## Latitude & Area: The North-South Conservation Divide
 
 ### Is there a relationship between geographical latitude and the size of designated wetlands?
 
-Helps visualize if northern (Himalayan) wetlands tend to be larger or smaller than southern/peninsular ones.
+The objective here is to investigate if northern wetlands tend to be larger or smaller than wetlands in the peninsula. We can do this by comparing the area of wetlands against their coordinates.
 
 ```{r}
 #| label: geographical distribution
@@ -358,13 +526,11 @@ ggplot(ramsar_clean, aes(x = Latitude, y = Area)) +
   guides(size = "none")
 ```
 
-The Log-scaled histogram reveals that India protects a wide "Size Spectrum." Most sites fall within the **1,000 to 10,000-hectare range**. However, the presence of sites on the extreme right of the log scale indicates "Mega-Wetlands" (massive river basins or lakes) that serve as critical national ecological anchors, while the smaller peaks represent specialized bird sanctuaries or niche habitats.
-
 ## District-Level Granularity within Leading States
 
 ### Within the states with the most RAMSAR sites, are the wetlands clustered in specific districts or spread across the state?
 
-Identifies "ecological hubs" at a local government level, which is useful for management authority analysis.
+Identifies "ecological hubs" at a regional level, which is useful for management authority analysis.
 
 ```{r}
 #| label: Identifying ecological hubs
@@ -385,11 +551,11 @@ ramsar_clean |>
 
 The scatter plot with the regression line shows a fascinating geospatial trend: **Northern wetlands tend to be larger in area.** As latitude increases, we see more "Mega-Wetlands." This is likely due to the vast floodplains of the Himalayan river systems. In contrast, southern latitudes (closer to the equator) feature a higher number of smaller, fragmented coastal and tank ecosystems.
 
-## The "Anthropogenic Shift": Natural vs. Human-Made
+## The Anthropogenic Shift: Natural vs. Human-Made Wetlands
 
 This analysis reveals if India is increasingly relying on man-made reservoirs for international conservation status and determines if India’s conservation strategy is shifting toward protecting infrastructure-based biodiversity.
 
-Recent additions like **Siliserh Lake** (Rajasthan) and **Kopra Reservoir** (Chhattisgarh) are artificial ecosystems.
+Recent additions made in 2025, like **Siliserh Lake** (Rajasthan) and **Kopra Reservoir** (Chhattisgarh), are artificial ecosystems.
 
 ### What percentage of India's RAMSAR network is comprised of human-made "Artificial" wetlands, and how does their average size compare to natural basins?
 
