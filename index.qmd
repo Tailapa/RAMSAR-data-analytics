@@ -1,7 +1,9 @@
 ---
 title: "Evaluating 40 Years of Wetland Conservation Policy (1981–2025)"
 subtitle: "A Spatio-Temporal EDA of India’s RAMSAR Sites"
-author: "Shashank Venkatesh"
+author: 
+  - name: "Shashank Venkatesh"
+    email: "shashankv285@gmail.com"
 date: last-modified
 format:
   html:
@@ -23,6 +25,16 @@ execute:
 bibliography: references.bib
 editor_options: 
   chunk_output_type: console
+
+comments:
+  giscus:
+    repo: "tailapa" # Replace with your repo
+    category: "Announcements"  
+    mapping: pathname
+    reactions-enabled: true
+    input-position: top
+    theme: light
+    language: en
 ---
 
 ::: {#policy_brief .callout style="simple"}
@@ -72,6 +84,7 @@ library(plotly)
 library(tidytext)
 library(patchwork) # To combine plots if needed
 library(ggwordcloud)
+library(viridis)
 
 #library(rnaturalearth) # Error in Indian map with wrong administrative boundaries
 #library(rnaturalearthdata) #
@@ -599,22 +612,30 @@ ramsar_clean |>
 
 The scatter plot with the regression line shows a fascinating geospatial trend: **Northern wetlands tend to be larger in area.** As latitude increases, we see more "Mega-Wetlands." This is likely due to the vast floodplains of the Himalayan river systems. In contrast, southern latitudes (closer to the equator) feature a higher number of smaller, fragmented coastal and tank ecosystems.
 
-## The Anthropogenic Shift: Natural vs. Human-Made Wetlands
+## Natural vs. Human-Made Wetlands: Is there an Anthropogenic shift?
 
-This analysis reveals if India is increasingly relying on man-made reservoirs for international conservation status and determines if India’s conservation strategy is shifting toward protecting infrastructure-based biodiversity.
-
-Recent additions made in 2025, like **Siliserh Lake** (Rajasthan) and **Kopra Reservoir** (Chhattisgarh), are artificial ecosystems.
-
-### What percentage of India's RAMSAR network is comprised of human-made "Artificial" wetlands, and how does their average size compare to natural basins?
+Recent additions made in 2025, like **Siliserh Lake** (Rajasthan) and **Kopra Reservoir** (Chhattisgarh), are artificial ecosystems. This analysis reveals if India is increasingly relying on man-made reservoirs for international conservation status and determines if India’s conservation strategy is shifting toward protecting infrastructure-based ecosystems. Our goal here is to investigate what percentage of India's RAMSAR network is comprised of human-made "Artificial" wetlands, and to evaluate how their average size compare to natural basins.
 
 ```{r}
 #| label: Artificial wetlands
+
 # 1. Classification Logic
 ramsar_cat <- ramsar_clean |>
   mutate(Type = case_when(
     str_detect(WetlandName, "Reservoir|Dam|Barrage|Tank|Canal|Reserve") ~ "Human-Made / Managed",
     TRUE ~ "Natural / Semi-Natural"
   ))
+
+summary_type <- ramsar_cat |>
+  group_by(Type) |>
+  summarise(
+    Count = n(),
+    Total_Area = sum(Area),
+    Mean_Area = mean(Area),
+    Median_Area = median(Area)
+  ) |>
+  mutate(Area_Share_Pct = round((Total_Area / sum(Total_Area)) * 100, 1))
+
 
 # 2. Visualization
 ggplot(ramsar_cat, aes(x = Type, y = Area, fill = Type)) +
@@ -624,14 +645,22 @@ ggplot(ramsar_cat, aes(x = Type, y = Area, fill = Type)) +
   scale_y_log10(labels = label_comma()) +
   scale_fill_manual(values = c("Human-Made / Managed" = "#E63946", "Natural / Semi-Natural" = "#2A9D8F")) +
   scale_color_manual(values = c("Human-Made / Managed" = "#E63946", "Natural / Semi-Natural" = "#2A9D8F")) +
-  labs(title = "Scale Architecture: Natural vs. Managed Ecosystems",
-       subtitle = "Comparison of total area distribution (Hectares) across 96 sites",
+  labs(title = "Natural vs. Managed Ecosystems",
+       subtitle = "Comparison of total area distribution (Hectares)",
        x = NULL, y = "Area (Hectares, Log Scale)") +
   theme_minimal() +
-  theme(legend.position = "none", plot.title = element_text(face = "bold"))
+  theme(
+    legend.position = "none", 
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5)
+    )
 ```
 
-The violin-and-box plot reveals that human-made reservoirs and barrages are now statistically comparable in importance to natural lakes. The **Human-Made / Managed** category shows a dense cluster of designations, proving that India is successfully leveraging its irrigation infrastructure (tanks and reservoirs) to provide international-standard habitats for migratory species.
+The analysis makes it clear that India’s Ramsar portfolio is overwhelmingly focused on **Natural/Semi-Natural** systems with a commanding majority of **83 sites**, while **Human-made/Managed sites** (tanks and reservoirs) represent just **13 sites**. We can therefore say that India's conservation architecture is built on an organic foundation with human-made sites representing a supplementary layer of conservation, rather than being the primary intervention strategy.
+
+Moreover, one of the critical discoveries stemming from this analysis is that the **median area** of a typical human-made Ramsar site (1,675 ha) is **over three times larger** than a natural one (526 ha). Nonetheless, the **natural sites still represent 88.6% of the total area** compared to just 11.4% shared by human-made sites.
+
+It should also be noted here that the human-made reservoirs and barrages are now statistically comparable in importance to natural lakes, since India is leveraging its irrigation infrastructure to provide internationally recognized habitats for migratory species. Examples include **Pong dam in Himachal Pradesh** and **Beas Conservation Reserve in Punjab.**
 
 ## Semantic Analysis of Uniqueness: The Biodiversity Fingerprint
 
@@ -811,19 +840,32 @@ Sites like **Kolleru Lake (423 km** away from the nearest wetland), **Deepor Bee
 
 ## Management Diversity & Scale
 
-The dataset names various authorities, from "Retired Academics" to "Forest Departments."
-
-### Does the type of `ManagementAuthority` correlate with the **Total Area** protected? Do institutional authorities manage larger "Mega-Wetlands" while local/academic bodies manage smaller "Niche Sanctuaries"?
+The dataset names various authorities, from "Retired Academics" to "Forest Departments." One critical question to ask is whether there is a correlation between the type of wetland, its area and management authority. The answer to this question would reveal if institutional authorities manage larger mega-wetlands and local/academic bodies manage smaller niche sanctuaries.
 
 ```{r}
 #| label: Visualizing if large basins are managed differently than smaller bird sanctuaries.
+#| include: false
+#| eval: false
+
 # 1. Simplify Authority Categories
 ramsar_auth <- ramsar_clean |>
   mutate(AuthType = case_when(
     str_detect(ManagementAuthority, "Forest|Department|Wildlife") ~ "State Forest Dept",
     str_detect(ManagementAuthority, "University|Academic|Retired") ~ "Academic/Expert",
-    TRUE ~ "Other/Local Authority"
+    TRUE ~ "Local Authority"
   ))
+
+governance_summary <- ramsar_auth |>
+  group_by(AuthType) |>
+  summarise(
+    Count = n(),
+    Median_Area = median(Area),
+    Total_Area = sum(Area),
+    .groups = "drop"
+  ) |>
+  mutate(Area_Contribution = round((Total_Area / sum(Total_Area)) * 100, 2))
+
+print(governance_summary)
 
 # 2. Visualization
 ggplot(ramsar_auth, aes(x = AuthType, y = Area, color = AuthType)) +
@@ -835,6 +877,66 @@ ggplot(ramsar_auth, aes(x = AuthType, y = Area, color = AuthType)) +
        x = "Authority Category", y = "Area (Hectares)") +
   theme_minimal() +
   theme(legend.position = "none", axis.text.x = element_text(face = "bold"))
+```
+
+```{r}
+#| label: governance-heatmap
+#| fig-height: 6
+#| fig-width: 7
+#| echo: false
+
+# 1. Combine all classification vectors
+ramsar_matrix <- ramsar_clean |>
+  mutate(
+    Type = case_when(
+      str_detect(WetlandName, "Reservoir|Dam|Barrage|Tank|Canal|Reserve") ~ "Human-Made",
+      TRUE ~ "Natural"
+    ),
+    AuthType = case_when(
+      str_detect(ManagementAuthority, "Forest|Department|Wildlife") ~ "State Forest Dept",
+      str_detect(ManagementAuthority, "University|Academic|Retired") ~ "Academic/Expert",
+      TRUE ~ "Other/Local Authority"
+    )
+  )
+
+# 2. Calculate the Geometric Correlation Table
+governance_summary <- ramsar_matrix |>
+  group_by(AuthType, Type) |>
+  summarise(
+    Count = n(),
+    Median_Area = median(Area),
+    Total_Area = sum(Area),
+    .groups = "drop"
+  ) |>
+  mutate(Area_Contribution = round((Total_Area / sum(Total_Area)) * 100, 2))
+
+# 1. Prepare the Grid Data
+heatmap_data <- ramsar_matrix |>
+  group_by(AuthType, Type) |>
+  summarise(Total_Area = sum(Area), .groups = "drop")
+
+# 2. Plotting the Geometric Matrix
+ggplot(heatmap_data, aes(x = Type, y = AuthType, fill = Total_Area)) +
+  geom_tile(color = "white", linewidth = 0.8) + # Creates the grid border
+  scale_fill_gradient(
+    trans = "log10", 
+    low = "#e9ecef", high = "#264653", # From neutral to "Massive" Dark Teal
+    labels = comma
+  ) +
+  geom_text(aes(label = comma(round(Total_Area))), color = "white", fontface = "bold", size = 6) +
+  labs(
+    title = "Governance Matrix",
+    subtitle = "Total Area (Hectares) across Institutional Actors",
+    x = "Ecological Origin", y = "Management Authority",
+    fill = "Total Area (Log Scale)"
+  ) +
+  theme_minimal() +
+  theme(
+    panel.grid = element_blank(),
+    axis.text = element_text(face = "bold", size = 10),
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5)
+  )
 ```
 
 The jittered scatter plot shows a clear institutional division: **State Forest Departments** manage the widest range of sites, including the "Mega-Wetlands." However, **"Other/Local Authorities"** and **"Academic/Expert"** bodies are increasingly involved in managing smaller, niche sanctuaries. This indicates a decentralization of conservation, where specialized knowledge is being used to protect smaller but ecologically "loud" sites.
