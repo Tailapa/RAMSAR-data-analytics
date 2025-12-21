@@ -28,7 +28,7 @@ editor_options:
 
 comments:
   giscus:
-    repo: "Tailapa" # Replace with your repo
+    repo: "Tailapa/RAMSAR-data-analytics"
     category: "Announcements"  
     mapping: pathname
     reactions-enabled: true
