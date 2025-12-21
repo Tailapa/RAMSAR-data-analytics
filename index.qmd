@@ -28,7 +28,7 @@ editor_options:
 
 comments:
   giscus:
-    repo: "tailapa" # Replace with your repo
+    repo: "Tailapa" # Replace with your repo
     category: "Announcements"  
     mapping: pathname
     reactions-enabled: true
