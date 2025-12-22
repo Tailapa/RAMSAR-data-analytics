@@ -180,7 +180,7 @@ ggplot() +
   # Apply a minimalist void theme
   theme_void() +
   labs(
-    title = "GEOSPATIAL ARCHITECTURE OF INDIA'S RAMSAR SITES",
+    title = "FIG 1: Dsitribution of India's Ramsar Sites",
     subtitle = "Analysis of 96 internationally significant wetlands as of Dec 2025",
     caption = "Data Source: Open Government Data (OGD) Platform India | Projection: WGS84"
   ) +
@@ -306,7 +306,9 @@ As the plot confirms, before 2020 (The Legacy Era), we only had 37 RAMSAR sites.
 
 ## State-wise Distribution of Wetlands
 
-### Does a small number of states hold the majority of India's RAMSAR designations, or is it evenly distributed?
+To understand thearchitecture of India’s Ramsar conservation, we must look beyond numbers to examine the state-wise distribution. We need to understand here that if the distribution is concentrated, the national conservation strategy would rely on a few power clusters, whereas in a dispersed distribution, the responsibility to manage is also distributed, creating a more economic regulatory framework.
+
+The designation of a Ramsar site is a reflection of both ecological wealth and administrative proactivity. Mapping the site count across states would enable the identification of **clustered corridors** and the **sparse zones** of the Ramsar network in Indian context. Therefore, we need to determine if a small number of states hold the majority of India's RAMSAR designations, or is it evenly distributed.
 
 ```{r}
 #| label: State-wise Distribution
@@ -359,7 +361,11 @@ The bar plot confirms a disparity in wetland distribution. **Tamil Nadu** leads 
 
 ## The Size Spectrum: Are we protecting large basins or small habitats?
 
-### What is the distribution of wetland sizes (Area), and are there "mega-wetlands" that skew the national average?
+As established in Fig:1, it is clear that the area represented by Ramsar sites is not uniform throughout the country. This aligns with India's diverse geographical terrain where different habitats are nurtured by diferent types of wetlands, but all of them are necessary to sustain their ecosystem.
+
+For instance, larger sites like the **Sundarbans (West Bengal)** or **Vembanad-Kol (Kerala)** act as macro-anchors which are essential for regional climate regulation, carbon sequestration, and protecting inland populations from cyclonic surges. Conversly, **medium sized sites** such as **Keoladeo National Park (Rajasthan)** function as nodal hubs, supporting migratory flyways. Whereas, **smaller sites** like the **Renuka Lake (Himachal Pradesh)**, act as refugee/niche habitats creating unique micro-climates for endemic species that would be lost in a larger, more competitive basin.
+
+The key question therefore, is to ask whether there is a correlation in the distribution of wetland sizes (Area), and are there mega-wetlands that skew the national average?
 
 ```{r}
 #| label: Large basins v/s small habitats
@@ -445,6 +451,8 @@ With **15.6%** of sites being relatively small (\< 100 ha), there is clear evide
 
 ## 3 vs 93: The Anchor Sites
 
+As previously discussed, just 3 sites (3.1% of total number of sites) hold a substantial area, each exceeding 100,000 hectares. We need to examine this further to analyse how these 3 large sites differ compared to other smaller sites on the Ramsar network.
+
 ```{r}
 #| label: area-concentration-analysis
 #| echo: false
@@ -517,9 +525,7 @@ The most crucial finding of this EDA is the extreme concentration of protected a
 
 ## Relationship between Latitude & Area of Wetlands
 
-### Is there a relationship between geographical latitude and the size of designated wetlands?
-
-The objective here is to investigate if northern wetlands tend to be larger or smaller than wetlands in the peninsula. We can do this by comparing the area of wetlands against their coordinates. This EDA reveals a surprising **inversion** in India’s wetland conservation paradigm. Despite the North having a network of rivers like the Indus-Ganga floodplains, the **Peninsular South** actually holds the overwhelming majority of India's protected wetland mass.
+The objective here is to investigate if northern wetlands tend to be larger or smaller than wetlands in the peninsula and to analyse if there exists a correlation between geographical latitude and the size of designated wetlands. We can do this by comparing the area of wetlands against their coordinates. This EDA reveals a surprising **inversion** in India’s wetland conservation paradigm. Despite the North having a network of rivers like the Indus-Ganga floodplains, the **Peninsular South** actually holds the overwhelming majority of India's protected wetland mass.
 
 ```{r}
 #| label: north-south-split
@@ -589,7 +595,7 @@ The fact that the Medians are so close (624 ha for north and 761 ha for south) w
 
 ## District-Level Granularity within Leading States
 
-### Within the states with the most RAMSAR sites, are the wetlands clustered in specific districts or spread across the state?
+Within the states with the most RAMSAR sites, are the wetlands clustered in specific districts or spread across the state?
 
 Identifies "ecological hubs" at a regional level, which is useful for management authority analysis.
 
@@ -662,9 +668,11 @@ Moreover, one of the critical discoveries stemming from this analysis is that th
 
 It should also be noted here that the human-made reservoirs and barrages are now statistically comparable in importance to natural lakes, since India is leveraging its irrigation infrastructure to provide internationally recognized habitats for migratory species. Examples include **Pong dam in Himachal Pradesh** and **Beas Conservation Reserve in Punjab.**
 
-## Semantic Analysis of Uniqueness: The Biodiversity Fingerprint
+## Semantic Analysis of Uniqueness
 
-A good approach to understand the uniqueness of India's RAMSAR sites is by performing Natural Language Processing (NLP) on the qualitative data (categorical data) contained in our dataset. This can be done by extracting and identifying specific keywords from the observation "Uniqueness" of the dataset that justify why these 96 sites were recognized by awarding them with international status.
+A good approach to understand the uniqueness of India's RAMSAR sites is by performing **Natural Language Processing (NLP)** on the **qualitative data (categorical** data) contained in our dataset. This can be done by extracting and identifying specific keywords from the **observation "Uniqueness"** of the dataset that justify why these 96 sites were recognized by awarding them with international status.
+
+The key question here is to evaluate the top three Ecological Drivers (e.g., Birds, Flood Control) that qualify an Indian site for RAMSAR status. This can be done by extracting the keywords of Uniqueness Observation to see what makes a wetland internationally significant in the Indian context.
 
 ```{r}
 #| label: Geometric Word Cloud
@@ -699,10 +707,6 @@ ggplot(uniqueness_words, aes(label = word, size = n, color = n)) +
   )
 ```
 
-### What are the top three Ecological Drivers (e.g., Birds, Flood Control) that qualify an Indian site for RAMSAR status?
-
-We extract the keywords of Uniqueness Observation to see what makes a wetland internationally significant in the Indian context.
-
 ```{r}
 #| label: analyse the uniqueness
 
@@ -717,7 +721,9 @@ ggplot(uniqueness_words, aes(x = n, y = reorder(word, n))) +
   theme(panel.grid.major.y = element_blank())
 ```
 
-The high frequency of terms like **"bird/birds/waterbirds" (appears 14 times),** **"sanctuary/reservoir" (appears 9 times)**, and **"migratory" (appears 4 times)**, confirms that India’s RAMSAR sites are primarily designated because of their role as bird sanctuaries in the Central Asian Flyway. This also signals that a large portion of India’s protected wetlands are irrigation reservoirs and designated sanctuaries, integrated into international conservation frameworks. Further, the appearance of words like **"freshwater" (5 times)** and **"endangered" (3 times)** indicates that the often used logic behind India's conservation framework of wetlands is threat-response, where the attention is focused on inland freshwater ecosystems (not just coastal) and their role in preventing the extinction of specific species.
+The high frequency of terms like **"bird/birds/waterbirds" (appears 14 times),** **"sanctuary/reservoir" (appears 9 times)**, and **"migratory" (appears 4 times)**, confirms that India’s RAMSAR sites are primarily designated because of their role as bird sanctuaries in the Central Asian Flyway. This also signals that a large portion of India’s protected wetlands are irrigation reservoirs and designated sanctuaries, integrated into international conservation frameworks.
+
+Further, the appearance of words like **"freshwater" (5 times)** and **"endangered" (3 times)** indicates that the often used logic behind India's conservation framework of wetlands is threat-response, where the attention is focused on inland freshwater ecosystems (not just coastal) and their role in preventing the extinction of specific species.
 
 ## The Seasonality of Global Recognition
 
