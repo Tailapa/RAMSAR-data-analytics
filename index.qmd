@@ -598,14 +598,15 @@ The fact that the Medians are so close (624 ha for north and 761 ha for south) w
 
 *Overall, while Northern India provides a consistent network of 46 sites, Peninsular India provides a relatively similar network of 50 sites but represents nearly 80% of the total protected area. Our EDA analysis reveals that conservation below ToC is defined by **massive basins**, while above ToC, it is defined by **niche clusters**.*
 
-## District-Level Granularity within Leading States
-
-Within the states with the most RAMSAR sites, are the wetlands clustered in specific districts or spread across the state?
-
-Identifies "ecological hubs" at a regional level, which is useful for management authority analysis.
+## 
 
 ```{r}
 #| label: Identifying ecological hubs
+#| eval: false
+#| include: false
+
+#District-Level Granularity within Leading States
+
 ramsar_clean |>
   filter(StateName == "Tamil Nadu") |>
   count(districtname) |>
@@ -620,8 +621,6 @@ ramsar_clean |>
   theme_minimal() +
   theme(panel.grid.major.y = element_blank())
 ```
-
-The scatter plot with the regression line shows a fascinating geospatial trend: **Northern wetlands tend to be larger in area.** As latitude increases, we see more "Mega-Wetlands." This is likely due to the vast floodplains of the Himalayan river systems. In contrast, southern latitudes (closer to the equator) feature a higher number of smaller, fragmented coastal and tank ecosystems.
 
 ## Natural vs. Human-Made Wetlands: Is there an Anthropogenic shift?
 
