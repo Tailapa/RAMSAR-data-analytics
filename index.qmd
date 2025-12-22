@@ -15,8 +15,8 @@ format:
     code-fold: false
     code-tools: false
     embed-resources: true
-    fig-height: 5  
-    fig-width: 5 
+    fig-height: 6  
+    fig-width: 6 
     fig-align: center
 execute:
   echo: false
@@ -61,7 +61,7 @@ By analyzing the **Size Spectrum** and **Designation Timeline**, this exercise s
 
 ## Data Source
 
-The foundational data for this analysis is sourced from the **Open Government Data (OGD) Platform India** which has a catalog on **Ramsar Sites**. This dataset provides the geometric coordinates, area in hectares, and designation dates for the wetlands, allowing for a precise spatial and temporal analysis.
+The foundational data for this analysis is sourced from the **Open Government Data (OGD) Platform India** which has a catalog on **RAMSAR Sites**. This dataset provides the geometric coordinates, area in hectares, and designation dates for the wetlands, allowing for a precise spatial and temporal analysis.
 
 ::: {.callout-note appearance="simple"}
 ## Data Accessibility
@@ -180,7 +180,7 @@ ggplot() +
   # Apply a minimalist void theme
   theme_void() +
   labs(
-    title = "FIG 1: Dsitribution of India's Ramsar Sites",
+    title = "FIG 1: Dsitribution of India's RAMSAR Sites",
     subtitle = "Analysis of 96 internationally significant wetlands as of Dec 2025",
     caption = "Data Source: Open Government Data (OGD) Platform India | Projection: WGS84"
   ) +
@@ -239,11 +239,11 @@ ggplot() +
 
 The above map illustrates that India's RAMSAR sites are not uniformly distributed but are clustered. We can see a concentration of sites in the **Indo-Gangetic Plain** and a significant concentration along the **Southern Coast (Tamil Nadu)**. The nodal points also indicate that the largest wetlands (by area) are mostly located in the North and East, while the South is characterized by a cluster of smaller sites.
 
-## The Acceleration of Conservation: A Temporal Growth Analysis
+## Temporal Growth Analysis
 
-### How has the rate of RAMSAR designations in India changed over the last three decades, particularly since the 2020s?
+Besides the spatial analysis, the other compelling story of India’s conservation policy is Time. Here, we try to analyze the chronological sequence of designations so that we can map the conservation speed of RAMSAR sites. This temporal lens reveals whether India’s RAMSAR network grew through steady, incremental additions or through sudden bursts of policy intervention.
 
-to pinpoint the "inflection point" where India’s wetland conservation policy shifted into high gear.
+For decades, the designation of RAMSAR sites in India followed a steady, linear growth pattern, characterized by a slow expansion of the protected network. Conversley, the recent data evinces a transition toward an exponential rise in the rate of declarations. In this light, it is crucial to evaluate how the rate of RAMSAR designations changed over the last three decades, particularly since the 2020s and to investigate if there existsan **'Inflection Point'** where the policy shifted from passive protection to active expansion.
 
 ```{r}
 #| label: temporal growth analysis
@@ -255,16 +255,18 @@ ggplot(ramsar_clean, aes(x = Date, y = cumulative_sites)) +
   geom_point(data = filter(ramsar_clean, Year >= 2020), 
              color = "#E63946", size = 1) +
   labs(
-    title = "The Exponential Rise of Indian RAMSAR Sites",
+    title = "Exponential Rise in Designation of RAMSAR Site",
     subtitle = "Cumulative designations from 1981 to December 2025",
     x = "Year of Designation", y = "Total Number of Sites"
   ) +
   theme_minimal() +
   theme(panel.grid.minor = element_blank(),
-        plot.title = element_text(face = "bold", size = 16, color = "#264653"))
+        plot.title = element_text(face = "bold", size = 16, color = "#264653", hjust = 0.5),
+        plot.subtitle = element_text(size = 12, hjust = 0.5)
+        )
 ```
 
-It is apparent from the above plot that a **Policy Inflection Point may have occurred around 2020**. While designations were sporadic from 1981 to 2010, the curve steepens sharply in the last five years with more than half (59) of India's current Ramsar sites designated since 2020, signaling an aggressive shift in national environmental policy and a heightened commitment to international conservation standards.
+It is apparent from the above plot that a **Policy Inflection Point occurred around 2020**. While designations were sporadic from 1981 to 2010, the curve steepens sharply in the last five years with more than half (59) of India's current RAMSAR sites designated since 2020, signaling an aggressive shift in national environmental policy and a heightened commitment to international conservation standards.
 
 ```{r}
 #| label: temporal analysis of designation 
@@ -288,27 +290,28 @@ ggplot(ramsar_phases, aes(x = Phase, y = n, fill = Phase)) +
   # Applying the Teal and Coral palette
   scale_fill_manual(values = c("Before 2020" = "#2A9D8F", "Since 2020" = "#E63946")) +
   labs(
-    title = "PHASE ANALYSIS: THE 2020 CONSERVATION PIVOT",
-    subtitle = "Comparing decades of legacy designations vs. recent geometric growth",
+    title = "Temporal Analysis: The 2020 Pivot",
+    subtitle = "Comparing legacy designations vs. recent additions",
     x = NULL, 
     y = "Number of Designated Sites"
   ) +
   theme_minimal() +
   theme(
     legend.position = "none",
-    plot.title = element_text(face = "bold", size = 16, color = "#264653"),
+    plot.title = element_text(face = "bold", size = 16, color = "#264653", hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
     panel.grid.major.x = element_blank(),
     axis.text.x = element_text(size = 12, face = "bold", color = "#264653")
   )
 ```
 
-As the plot confirms, before 2020 (The Legacy Era), we only had 37 RAMSAR sites. This represents nearly 40 years of gradual identification and designation since India joined the convention in 1982. However, post-2020 (The Modern Era), we can see that 59 additional sites were designated as RAMSAR sites, which forms **61% of India’s total RAMSAR sites were declared in just the last 5 years.** This sudden surge indicates a shift in environmental priority, where the administrative speed of protecting wetlands has tripled compared to the previous four decades.
+This EDA exercise and the corresponding plot implies that, before 2020 (The Legacy Era), we only had 37 RAMSAR sites. This represents nearly 40 years of gradual identification and designation since India joined the convention in 1982. However, post-2020 (The Modern Era), we can see that 59 additional sites were designated as RAMSAR sites, which forms **61% of India’s total RAMSAR sites were declared in just the last 5 years.** This sudden surge indicates a shift in environmental priority, where the administrative speed of protecting wetlands has tripled compared to the previous four decades.
 
 ## State-wise Distribution of Wetlands
 
-To understand thearchitecture of India’s Ramsar conservation, we must look beyond numbers to examine the state-wise distribution. We need to understand here that if the distribution is concentrated, the national conservation strategy would rely on a few power clusters, whereas in a dispersed distribution, the responsibility to manage is also distributed, creating a more economic regulatory framework.
+To understand thearchitecture of India’s RAMSAR conservation, we must look beyond numbers to examine the state-wise distribution. We need to understand here that if the distribution is concentrated, the national conservation strategy would rely on a few power clusters, whereas in a dispersed distribution, the responsibility to manage is also distributed, creating a more economic regulatory framework.
 
-The designation of a Ramsar site is a reflection of both ecological wealth and administrative proactivity. Mapping the site count across states would enable the identification of **clustered corridors** and the **sparse zones** of the Ramsar network in Indian context. Therefore, we need to determine if a small number of states hold the majority of India's RAMSAR designations, or is it evenly distributed.
+The designation of a RAMSAR site is a reflection of both ecological wealth and administrative proactivity. Mapping the site count across states would enable the identification of **clustered corridors** and the **sparse zones** of the RAMSAR network in Indian context. Therefore, we need to determine if a small number of states hold the majority of India's RAMSAR designations, or is it evenly distributed.
 
 ```{r}
 #| label: State-wise Distribution
@@ -326,6 +329,8 @@ ramsar_clean |>
   ) +
   theme_minimal() +
   theme(legend.position = "none",
+        plot.title = element_text(face = "bold", size = 16, color = "#264653", hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
         axis.text.y = element_text(size = 9, face = "bold"))
 ```
 
@@ -361,7 +366,7 @@ The bar plot confirms a disparity in wetland distribution. **Tamil Nadu** leads 
 
 ## The Size Spectrum: Are we protecting large basins or small habitats?
 
-As established in Fig:1, it is clear that the area represented by Ramsar sites is not uniform throughout the country. This aligns with India's diverse geographical terrain where different habitats are nurtured by diferent types of wetlands, but all of them are necessary to sustain their ecosystem.
+As established in Fig:1, it is clear that the area represented by RAMSAR sites is not uniform throughout the country. This aligns with India's diverse geographical terrain where different habitats are nurtured by diferent types of wetlands, but all of them are necessary to sustain their ecosystem.
 
 For instance, larger sites like the **Sundarbans (West Bengal)** or **Vembanad-Kol (Kerala)** act as macro-anchors which are essential for regional climate regulation, carbon sequestration, and protecting inland populations from cyclonic surges. Conversly, **medium sized sites** such as **Keoladeo National Park (Rajasthan)** function as nodal hubs, supporting migratory flyways. Whereas, **smaller sites** like the **Renuka Lake (Himachal Pradesh)**, act as refugee/niche habitats creating unique micro-climates for endemic species that would be lost in a larger, more competitive basin.
 
@@ -419,15 +424,15 @@ ggplot(size_summary, aes(x = Size_Bracket, y = Count, fill = Size_Bracket)) +
   
   theme_minimal() +
   labs(
-    title = "THE SIZE SPECTRUM",
-    subtitle = "Analysis of 96 RAMSAR sites by Area Bracket (Hectares)",
+    title = "Area Comparison",
+    subtitle = "Analysis of RAMSAR sites by Area Bracket (Hectares)",
     x = "Area Bracket (Ha)", y = "Number of Sites",
     fill = "Size Category"
   ) +
   theme(
     legend.position = "none",
     plot.title = element_text(face = "bold", size = 16, color = "#264653", hjust = 0.5),
-    plot.subtitle = element_text(hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5),
     axis.text = element_text(size = 11, color = "#264653"),
     panel.grid.major.x = element_blank()
   )
@@ -451,7 +456,7 @@ With **15.6%** of sites being relatively small (\< 100 ha), there is clear evide
 
 ## 3 vs 93: The Anchor Sites
 
-As previously discussed, just 3 sites (3.1% of total number of sites) hold a substantial area, each exceeding 100,000 hectares. We need to examine this further to analyse how these 3 large sites differ compared to other smaller sites on the Ramsar network.
+As previously discussed, just 3 sites (3.1% of total number of sites) hold a substantial area, each exceeding 100,000 hectares. We need to examine this further to analyse how these 3 large sites differ compared to other smaller sites on the RAMSAR network.
 
 ```{r}
 #| label: area-concentration-analysis
@@ -501,8 +506,8 @@ ggplot(comparison_df, aes(x = 2, y = percentage, fill = Category)) +
   # Styling and Labels
   theme_void() +
   labs(
-    title = "THE ANCHOR WETLANDS",
-    subtitle = "Areal breakdown of India's 40-year RAMSAR footprint",
+    title = "Massive Wetland Sites: The Anchors",
+    subtitle = "Areal breakdown RAMSAR footprint",
     caption = "3.1% of sites vs 96.9% of sites"
   ) +
   # Overlaying the Data Labels
@@ -512,14 +517,14 @@ ggplot(comparison_df, aes(x = 2, y = percentage, fill = Category)) +
             fontface = "bold", 
             size = 4) +
   theme(
-    plot.title = element_text(face = "bold", size = 14, color = "#264653", hjust = 0.5),
-    plot.subtitle = element_text(size = 12, color = "#666666", hjust = 0.5, margin = margin(b = 20)),
+    plot.title = element_text(face = "bold", size = 16, color = "#264653", hjust = 0.5, margin = margin(t=5, b=5)),
+    plot.subtitle = element_text(size = 12, color = "#666666", hjust = 0.5),
     plot.caption = element_text(size = 10, hjust = 0.5),
     legend.position = "none" # Labels are inside the chart
   )
 ```
 
-The most crucial finding of this EDA is the extreme concentration of protected acreage in just three locations - `r area_dist$WetlandName[1]`, `r area_dist$WetlandName[2]` and `r area_dist$WetlandName[3]` . These **3 sites** (3.1% of the total Ramsar sites) command nearly **half (44.9%)** of the entire national RAMSAR footprint. With **690,750 hectares** concentrated in these hubs, they serve as the primary Carbon sinks and hydrological regulators for the country. This anchors them as the most crucial hubs in India's Ramsar sites conservation framework and hence these sites warrant special and focused attention. The remaining **93 sites** represent **847,207 hectares**, averaging only about 9,100 hectares per site. While these sites are individually smaller, they act as spokes of the wetland protection network since they provide vital connectivity across different climatic zones, bird flyways, and state borders.
+The most crucial finding of this EDA is the extreme concentration of protected acreage in just three locations - `r area_dist$WetlandName[1]`, `r area_dist$WetlandName[2]` and `r area_dist$WetlandName[3]` . These **3 sites** (3.1% of the total Ramsar sites) command nearly **half (44.9%)** of the entire national RAMSAR footprint. With **690,750 hectares** concentrated in these hubs, they serve as the primary Carbon sinks and hydrological regulators for the country. This anchors them as the most crucial hubs in India's RAMSAR sites conservation framework and hence these sites warrant special and focused attention. The remaining **93 sites** represent **847,207 hectares**, averaging only about 9,100 hectares per site. While these sites are individually smaller, they act as spokes of the wetland protection network since they provide vital connectivity across different climatic zones, bird flyways, and state borders.
 
 *Overall, while the Hubs provide the scale and act as national ecological anchors, the Spokes provide the resilience by ensuring that if one region faces a drought or ecological crisis, other nodes in the network can still support migratory species. This **dual-track strategy** of protecting massive hubs while expanding a dense network of small spokes is the highlight of India's modern conservation framework.*
 
@@ -563,7 +568,7 @@ ggplot(ramsar_clean, aes(x = Latitude, y = Area)) +
   scale_y_log10(labels = comma) +
   labs(
     title = "Relationship between Latitude and Wetland Size",
-    subtitle = "Isolating Northern Basins from Peninsular Nodes",
+    subtitle = "Near Perfect Distribution",
     x = "Latitude (Degrees North)", y = "Area in Hectares (Log Scale)"
   ) +
   theme_minimal() +
@@ -664,7 +669,7 @@ ggplot(ramsar_cat, aes(x = Type, y = Area, fill = Type)) +
 
 The analysis makes it clear that India’s Ramsar portfolio is overwhelmingly focused on **Natural/Semi-Natural** systems with a commanding majority of **83 sites**, while **Human-made/Managed sites** (tanks and reservoirs) represent just **13 sites**. We can therefore say that India's conservation architecture is built on an organic foundation with human-made sites representing a supplementary layer of conservation, rather than being the primary intervention strategy.
 
-Moreover, one of the critical discoveries stemming from this analysis is that the **median area** of a typical human-made Ramsar site (1,675 ha) is **over three times larger** than a natural one (526 ha). Nonetheless, the **natural sites still represent 88.6% of the total area** compared to just 11.4% shared by human-made sites.
+Moreover, one of the critical discoveries stemming from this analysis is that the **median area** of a typical human-made RAMSAR site (1,675 ha) is **over three times larger** than a natural one (526 ha). Nonetheless, the **natural sites still represent 88.6% of the total area** compared to just 11.4% shared by human-made sites.
 
 It should also be noted here that the human-made reservoirs and barrages are now statistically comparable in importance to natural lakes, since India is leveraging its irrigation infrastructure to provide internationally recognized habitats for migratory species. Examples include **Pong dam in Himachal Pradesh** and **Beas Conservation Reserve in Punjab.**
 
@@ -714,11 +719,15 @@ ggplot(uniqueness_words, aes(label = word, size = n, color = n)) +
 ggplot(uniqueness_words, aes(x = n, y = reorder(word, n))) +
   geom_col(fill = "#264653") +
   geom_text(aes(label = n), hjust = -0.2, size = 3, color = "#264653") +
-  labs(title = "The Vocabulary of Conservation",
-       subtitle = "Top recurring terms in site uniqueness descriptions",
+  labs(title = "Semantic Analysis: Vocabulary of Conservation",
+       subtitle = "Top recurring terms in Uniqueness Observation",
        x = "Frequency of Mention", y = NULL) +
   theme_minimal() +
-  theme(panel.grid.major.y = element_blank())
+  theme(
+    panel.grid.major.y = element_blank(),
+    plot.title = element_text(face = "bold", size = 16, color = "#264653", hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5)
+    )
 ```
 
 The high frequency of terms like **"bird/birds/waterbirds" (appears 14 times),** **"sanctuary/reservoir" (appears 9 times)**, and **"migratory" (appears 4 times)**, confirms that India’s RAMSAR sites are primarily designated because of their role as bird sanctuaries in the Central Asian Flyway. This also signals that a large portion of India’s protected wetlands are irrigation reservoirs and designated sanctuaries, integrated into international conservation frameworks.
@@ -744,14 +753,18 @@ ggplot(ramsar_months, aes(x = Month, y = n, fill = n)) +
        subtitle = "Frequency of RAMSAR announcements by month",
        x = NULL, y = NULL) +
   theme_minimal() +
-  theme(axis.text.y = element_blank())
+  theme(
+    axis.text.y = element_blank(),
+    plot.title = element_text(face = "bold", size = 16, color = "#264653", hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5)
+    )
 ```
 
 As can be inferred from the radial plot, the announcement of RAMSAR sites are not distributed evenly throughout the year. Rather, we can observe a nesting in a few months, like **`r ramsar_months$Month[1]`,** when **`r ramsar_months$n[1]`** sites were declared, and in **`r ramsar_months$Month[2]`** when **`r ramsar_months$n[2]`**, and in **`r ramsar_months$Month[3]`,** when again, **`r ramsar_months$n[3]`** sites were declared as RAMSAR sites. This aligns with prominent annual events such as **World Wetlands Day on February** **2nd** or **Independence day on August 15th**. For instance, on India's 75th Independence Day, Environment Minister Sri Bhupendra Yadav declared on social media pllatform 'X' that he was, "Elated to inform that 11 more Indian wetlands have got RAMSAR recognition. This takes our tally to 75 sites." \[1\] This shows that there is a window of announcement, often tied to global environmental milestones and diplomatic postures.
 
 ## Fragmented vs. Clustered Landscapes
 
-Considering the spatial distribution of Ramsar sites, one might argue that there is no clear pattern as to whether they are getting clustered or isolated. Hence, the question we pose here is to investigate the pattern of spatial distribution of Ramsar sites to identify Hotspots (like the Tamil Nadu belt) versus Isolated sites (like Pala Wetland in Mizoram). This can be done by calculating how far each site is from its closest neighbor. The findings are interesting.
+Considering the spatial distribution of RAMSAR sites, one might argue that there is no clear pattern as to whether they are getting clustered or isolated. Hence, the question we pose here is to investigate the pattern of spatial distribution of RAMSAR sites to identify Hotspots (like the Tamil Nadu belt) versus Isolated sites (like Pala Wetland in Mizoram). This can be done by calculating how far each site is from its closest neighbor. The findings are interesting.
 
 ```{r}
 #| label: Nearest Neighbor Identification
@@ -813,8 +826,8 @@ ggplot(isolated_top_20, aes(x = reorder(ShortName, min_dist_km), y = min_dist_km
   
   # Academic Labels
   labs(
-    title = "ECOLOGICAL ISOLATION: TOP 20 VECTORS",
-    subtitle = "Quantifying fragmentation: Distance (km) to the nearest neighbor",
+    title = "Ecologically Isolated Sites",
+    subtitle = "Quantifying Distance (km) to the nearest neighbor",
     x = NULL, 
     y = "Minimum Separation Distance (km)",
     color = "Isolation (km)"
@@ -824,7 +837,8 @@ ggplot(isolated_top_20, aes(x = reorder(ShortName, min_dist_km), y = min_dist_km
   theme_minimal() +
   theme(
     text = element_text(family = "sans", color = "#264653"),
-    plot.title = element_text(face = "bold", size = 16),
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5),
     axis.text.y = element_text(size = 9),
     panel.grid.major.y = element_blank(), # Clean background
     legend.position = "bottom"
@@ -876,11 +890,15 @@ ggplot(ramsar_auth, aes(x = AuthType, y = Area, color = AuthType)) +
   geom_jitter(size = 3, alpha = 0.6, width = 0.2) +
   scale_y_log10(labels = label_comma()) +
   scale_color_manual(values = c("#264653", "#E63946", "#2A9D8F")) +
-  labs(title = "Institutional Scale and Oversight",
+  labs(title = "Institutional Analysis",
        subtitle = "Wetland area managed by different authority types",
        x = "Authority Category", y = "Area (Hectares)") +
   theme_minimal() +
-  theme(legend.position = "none", axis.text.x = element_text(face = "bold"))
+  theme(
+    legend.position = "none", axis.text.x = element_text(face = "bold"),
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5)
+    )
 ```
 
 ```{r}
@@ -939,7 +957,7 @@ ggplot(heatmap_data, aes(x = Type, y = AuthType, fill = Total_Area)) +
     panel.grid = element_blank(),
     axis.text = element_text(face = "bold", size = 10),
     plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
-    plot.subtitle = element_text(hjust = 0.5)
+    plot.subtitle = element_text(size = 12, hjust = 0.5)
   )
 ```
 
@@ -947,9 +965,9 @@ The analysis indicates the general trend mapping key governing institutions mana
 
 **Natural Sites**
 
-For instance, With **54 sites** and managing **60% of the total area (**923,172 ha**)**, **State Forest Departments** emerge as the dominant governing authority for natural Ramsar sites. On the other hand, the small median of 488 ha for this group shows that the State Departments manages a large tail of small Natural Ramsar sites, anchored by a few larger sites.
+For instance, With **54 sites** and managing **60% of the total area (**923,172 ha**)**, **State Forest Departments** emerge as the dominant governing authority for natural RAMSAR sites. On the other hand, the small median of 488 ha for this group shows that the State Departments manages a large tail of small Natural RAMSAR sites, anchored by a few larger sites.
 
-Unlike the state departments, **Other/Local Authorities** manage **28.6%** of the total Natural Ramsar wetland area (439,830 ha), managing 29 sites. This implies that while the State handles the extremes (very small and very large sites), Local Authorities manage the mid sized natural sites. Thus, they act as connecting conduits between large anchor hubs and smaller spokes.
+Unlike the state departments, **Other/Local Authorities** manage **28.6%** of the total Natural RAMSAR wetland area (439,830 ha), managing 29 sites. This implies that while the State handles the extremes (very small and very large sites), Local Authorities manage the mid sized natural sites. Thus, they act as connecting conduits between large anchor hubs and smaller spokes.
 
 **Artificial Sites**
 
