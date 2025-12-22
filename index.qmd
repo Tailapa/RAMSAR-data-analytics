@@ -719,11 +719,9 @@ ggplot(uniqueness_words, aes(x = n, y = reorder(word, n))) +
 
 The high frequency of terms like **"bird/birds/waterbirds" (appears 14 times),** **"sanctuary/reservoir" (appears 9 times)**, and **"migratory" (appears 4 times)**, confirms that India’s RAMSAR sites are primarily designated because of their role as bird sanctuaries in the Central Asian Flyway. This also signals that a large portion of India’s protected wetlands are irrigation reservoirs and designated sanctuaries, integrated into international conservation frameworks. Further, the appearance of words like **"freshwater" (5 times)** and **"endangered" (3 times)** indicates that the often used logic behind India's conservation framework of wetlands is threat-response, where the attention is focused on inland freshwater ecosystems (not just coastal) and their role in preventing the extinction of specific species.
 
-## The "Seasonality" of Global Recognition
+## The Seasonality of Global Recognition
 
-### Is there a "policy window" where sites are more likely to be designated around specific international events (e.g., World Wetlands Day or Independence Day)?
-
-Reveals if political timelines influence ecological milestones. A radial plot to see if designations cluster around specific months (Policy Momentum).
+As previously discussed, at the outset, there were **only 37 sites before 2020**. This **changed drastically** in the **last five years** with the announcement of **59 additional sites**, which often involved **bundled designations** in one go. This makes one curious to inquire if there is a **"policy window"** where sites are more likely to be designated around specific international events (e.g., World Wetlands Day or Independence Day). The answer to this would show **if political timelines influence environmental milestones**. We can understand this by employing a **radial plot** to see if designations cluster around specific months (Policy Momentum).
 
 ```{r}
 #| label: seasonality-analysis
@@ -747,9 +745,7 @@ As can be inferred from the radial plot, the announcement of RAMSAR sites are no
 
 ## Fragmented vs. Clustered Landscapes
 
-### Are Indian RAMSAR sites getting clustered or isolated?
-
-Identify Hotspots (like the Tamil Nadu belt) versus Isolated sites (like Pala Wetland in Mizoram). This calculates how far each site is from its closest "Conservation Neighbor" to identify hubs.
+Considering the spatial distribution of Ramsar sites, one might argue that there is no clear pattern as to whether they are getting clustered or isolated. Hence, the question we pose here is to investigate the pattern of spatial distribution of Ramsar sites to identify Hotspots (like the Tamil Nadu belt) versus Isolated sites (like Pala Wetland in Mizoram). This can be done by calculating how far each site is from its closest neighbor. The findings are interesting.
 
 ```{r}
 #| label: Nearest Neighbor Identification
@@ -836,11 +832,13 @@ isolation_summary <- ramsar_clean |>
 
 ```
 
-Sites like **Kolleru Lake (423 km** away from the nearest wetland), **Deepor Beel (268 km)**, and **Loktak Lake (268 km)** are what experts call **"Ecological Islands."** These sites are geographically lonely considering the nearest RAMSAR site. Hence, from a policy perspective, this necessitates localized, high-intensity management because they cannot rely on neighboring wetlands. At the other end of the spectrum, we have sites like **Chitrangudi and Kanjirankulam (2.07 km)** or **Nagi and Nakti (5.34 km)**. These are not just individual sites; they are **Conservation Complexes**. Geometrically, these nodes are so close they likely share the same migratory bird populations and water tables. This suggests that recent policy (post-2020) has shifted toward protecting "clusters," effectively creating larger "Safety Zones" rather than just isolated spots.
+Sites like **Kolleru Lake (423 km** away from the nearest wetland), **Deepor Beel (268 km)**, and **Loktak Lake (268 km)** are what experts might call **"Ecological Islands."** These sites are geographically lonely considering the nearest RAMSAR site. Hence, from a policy perspective, this necessitates localized, high-intensity management because they cannot rely on neighboring wetlands.
 
-## Management Diversity & Scale
+At the other end of the spectrum, we have sites like **Chitrangudi and Kanjirankulam (2.07 km)** or **Nagi and Nakti (5.34 km)**. These are not just individual sites; they are **clustered complexes**. Geometrically, these nodes are so close they likely share the same migratory bird populations and water tables. This suggests that recent policy (post-2020) has shifted toward protecting "clusters," effectively creating larger safety zones rather than just isolated spots.
 
-The dataset names various authorities, from "Retired Academics" to "Forest Departments." One critical question to ask is whether there is a correlation between the type of wetland, its area and management authority. The answer to this question would reveal if institutional authorities manage larger mega-wetlands and local/academic bodies manage smaller niche sanctuaries.
+## Governing Diversity
+
+The dataset names various authorities, from "Retired Academics" to "Forest Departments." One critical question to ask is whether there is a correlation between the type of wetland, its area and management authority. The answer to this question would reveal if institutional authorities manage mega-wetlands and whether local/academic bodies manage smaller niche sanctuaries.
 
 ```{r}
 #| label: Visualizing if large basins are managed differently than smaller bird sanctuaries.
@@ -925,7 +923,7 @@ ggplot(heatmap_data, aes(x = Type, y = AuthType, fill = Total_Area)) +
   ) +
   geom_text(aes(label = comma(round(Total_Area))), color = "white", fontface = "bold", size = 6) +
   labs(
-    title = "Governance Matrix",
+    title = "Governance-Area-Origin Matrix",
     subtitle = "Total Area (Hectares) across Institutional Actors",
     x = "Ecological Origin", y = "Management Authority",
     fill = "Total Area (Log Scale)"
@@ -939,6 +937,16 @@ ggplot(heatmap_data, aes(x = Type, y = AuthType, fill = Total_Area)) +
   )
 ```
 
-The jittered scatter plot shows a clear institutional division: **State Forest Departments** manage the widest range of sites, including the "Mega-Wetlands." However, **"Other/Local Authorities"** and **"Academic/Expert"** bodies are increasingly involved in managing smaller, niche sanctuaries. This indicates a decentralization of conservation, where specialized knowledge is being used to protect smaller but ecologically "loud" sites.
+The analysis indicates the general trend mapping key governing institutions managing Ramsar sites based on their type and their area.
+
+**Natural Sites**
+
+For instance, With **54 sites** and managing **60% of the total area (**923,172 ha**)**, **State Forest Departments** emerge as the dominant governing authority for natural Ramsar sites. On the other hand, the small median of 488 ha for this group shows that the State Departments manages a large tail of small Natural Ramsar sites, anchored by a few larger sites.
+
+Unlike the state departments, **Other/Local Authorities** manage **28.6%** of the total Natural Ramsar wetland area (439,830 ha), managing 29 sites. This implies that while the State handles the extremes (very small and very large sites), Local Authorities manage the mid sized natural sites. Thus, they act as connecting conduits between large anchor hubs and smaller spokes.
+
+**Artificial Sites**
+
+On similar lines as Natural sites, with **10 sites and 9.4% of the total area,** "**State Department"** is the dominant regulatory authority for Human-Made sites. Furthermore, **Local Authority** manages only **2 Human-Made sites** representing just **1.3% of the total area.** Alternatively, we also have a new category of governing authority - **Academic/Expert** - managing a lone site in **Ankasamudra Bird Conservation Reserve in Karnataka.**
 
 ### 
