@@ -70,7 +70,7 @@ The dataset for this analysis is sourced from the **Open Government Data (OGD) P
 
 [Download OGD Dataset](https://www.data.gov.in/catalog/ramsar-sites-details){.btn .btn-outline-primary .btn-sm role="button"}
 
-[Download RSIS Dataset](https://rsis.ramsar.org/sites/default/files/rsiswp_search/exports/ramsar-sites-tabular-20251222-192500-11d099a77a71e0b34b74eedddd54249a.csv)
+[Download RSIS Dataset](https://rsis.ramsar.org/sites/default/files/rsiswp_search/exports/ramsar-sites-tabular-20251222-192500-11d099a77a71e0b34b74eedddd54249a.csv){.btn .btn-outline-primary .btn-sm role="button"}
 :::
 
 ```{r}
@@ -1250,6 +1250,8 @@ On similar lines as Natural sites, with **10 sites and 9.4% of the total area,**
 
 ## Threats faced by Wetlands
 
+Approximately 4.86% of India’s land area is covered by wetlands – ecosystems that are often referred to as the “Earth’s kidneys” because of their critical role in maintaining ecological balance. Yet, many of India’s wetlands are under threat due to climate change, urbanization, pollution, and unscientific land-use practices. Urban wetlands are especially vulnerable due to rapid urbanization and unchecked discharge from nearby industries or untreated sewage.
+
 ```{r}
 #| label: Threat analysis
 
@@ -1294,35 +1296,29 @@ ggplot(threat_analysis |> head(10), aes(x = reorder(Threats, n), y = n)) +
   )
 ```
 
-The Anthropogenic Pressure Grid
+**Anthropogenic Pressure**
 
-The threat profile for these wetlands reveals a "Density Matrix" where human expansion and resource extraction form the primary stressors. Unlike ecological diversity, which showed a structural shift in 2020, the threat data illustrates a persistent, multi-vector assault on wetland integrity.
+The threat analysis of these wetlands indicates that human expansion and resource extraction form the primary stressors. Unlike ecological diversity, which showed a structural shift in 2020, the threat data shows a persistent, multi-dimension assault on wetland health.
 
-------------------------------------------------------------------------
+**Dominance of Spatial Encroachment (Threats 1, 2, 9)**
 
-1\. The Dominance of "Spatial Encroachment" (Threats 1, 2, 9)
+The most significant pressure comes from the encroachment of wetlands by anthropogenic factors. Non-agricultural settlements (4.93%) and Agriculture (4.64%) represent the two highest frequency threats. This suggests that wetlands are being squeezed from both sides - urban sprawl and the need for food production. If we combine "Housing and urban areas" with "Human settlements," the urban footprint becomes the undisputed primary factor responsible for degradation.
 
-The most significant pressure comes from the physical conversion of wetland edges into human-use zones.
+**Biological Integrity Decay (Threats 4, 8)**
 
--   The Urban-Agri Pincer: Non-agricultural settlements (4.93%) and Agriculture (4.64%) represent the two highest frequency threats. This suggests that wetlands are being squeezed from both sides: urban sprawl and the need for food production.
+Invasive species appear twice in the top 10 list (at 4.17% and 3.65%), indicating a high degree of biological contamination. The presence of invasive species and problematic genes implies that the ecological complexity is being threatened by non-native species.
 
--   Geometric Tension: If we combine "Housing and urban areas" with "Human settlements," the urban footprint becomes the undisputed primary vector of degradation.
+**Hydrological Paradox (Threat 5)**
 
-2\. The "Biological Integrity" Decay (Threats 4, 8)
+Though water regulation (4.00%) ranks in the middle of the matrix, it underscores a critical contradiction - while these are Ramsar sites (protected for their water), the very "regulation" of that water (dams, diversions, or pumping) is one of their top 5 threats.
 
-Invasive species appear twice in the top 10 list (at 4.17% and 3.65%), indicating a high degree of biological "contamination."
+Analysis of factors at the tail-end of threats points to the less visible concerns of wetland degradation. Even though infrastructure and sensory pollution (light/sound) currently occupy a minimal footprint in the data, they may represent the next big challenge of urban wetland management. As our wetlands become increasingly encroached by urban expansion, these low-level threats may transition into primary stressors in the near-future.
 
--   Systemic Fragility: The presence of invasive species and problematic genes suggests that even if the physical water remains, the Ecological Complexity (the Diversity Score we calculated earlier) is being hollowed out by non-native competitors.
-
-3\. The Hydrological Paradox (Threat 5)
-
-Water regulation (4.00%) ranks in the middle of the matrix.
-
--   Analysis: This highlights a critical contradiction: while these are Ramsar sites (protected for their water), the very "regulation" of that water (dams, diversions, or pumping) is one of their top 5 threats. This is likely the "smoking gun" for why many legacy sites have low diversity scores—their natural pulse has been replaced by human engineering.
-
-The Tail-End Threat Analysis reveals the 'Invisible Vectors' of wetland degradation. While infrastructure and sensory pollution (light/sound) currently occupy a minimal footprint in the data, they represent the next frontier of urban wetland management. As India's 'Super-Nodes' become increasingly enveloped by metropolitan grids, these low-frequency threats will transition into primary stressors. The Policy Lever: Proactive mitigation of light and sound pollution should be 'baked-in' to the management plans of urban Ramsar sites before they trigger a decline in avian diversity scores.
+Proactive mitigation of light and sound pollution should be empasized in the management plans of urban Ramsar sites before they trigger a decline in ecological diversity.
 
 ## Red List of Wetlands
+
+The aim here is to identify the list of wetlands with specific environmental stressors. By analyzing threat density - the total number of unique threats reported per site, we can pinpoint wetlands reaching a critical saturation point, where multiple pressures overlap to create a compound crisis.
 
 ```{r}
 #| label: Red List of Wetlands
@@ -1361,7 +1357,8 @@ ggplot(risk_value_data, aes(x = Diversity_Score, y = Threat_Count)) +
   ) +
   theme(
     panel.grid.minor = element_blank(),
-    plot.title = element_text(face = "bold")
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5)
   )
 
 
@@ -1375,5 +1372,17 @@ knitr::kable(top_risk_sites,
              col.names = c("Ramsar Site Name", "Total Threat Count", "Diversity Score"),
              caption = "THE RED LIST: Top 10 Sites by Threat Density")
 ```
+
+We define the **"Red List" of Indian Wetlands** as those high-value sites that achieve a **Diversity Score of 5 or higher** while simultaneously facing **20 or more unique threats**. These sites represent the most ecologically significant yet vulnerable areas in the country. Based on the data, the following sites are under extreme pressure:
+
+1.  **Pallikaranai Marsh Reserve Forest (39 Threats):** This is the most stressed wetland in the current assessment. It is experiencing a total system assault, facing everything from urban sprawl and industrial pollution to sensory disturbances (light and noise) and severe climate events.
+
+2.  **Gulf of Mannar Marine Biosphere Reserve (35 Threats):** A complex marine ecosystem where heavy industrial activity, international shipping lanes, and climate change pressures converge.
+
+3.  **Nandur Madhameshwar & Longwood Shola (34 Threats):** These sites are suffering from severe fragmentation due to a high density of infrastructure, such as roads and utility lines, combined with relentless agricultural encroachment.
+
+4.  **Asan & Beas Conservation Reserves (29 Threats):** These riverine systems are primarily stressed by hydrological disruptions—including water regulation, dams, and canalization—compounded by heavy recreational and tourism use.
+
+The analysis reveals that India's Ramsar sites are not merely facing isolated environmental problems, but ompound crises. Sites like the **Pallikaranai Marsh** are navigating nearly 40 distinct threats simultaneously. As a wetland falls within an urban or industrial sphere, the number of threats does not simply increase—it multiplies. This suggests that traditional conservation methods, which focus solely on protecting the water body itself, are insufficient. To preserve these high-value areas, management must shift toward integrated mitigation strategies that address the surrounding urban and industrial infrastructure as part of the broader ecosystem.
 
 ## Conclusion
