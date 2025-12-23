@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        :root {
+            --primary: #264653;
+            --secondary: #2A9D8F;
+            --accent: #E76F51;
+            --neutral: #f4f4f4;
+            --text: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+        }
+
+        .container {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+        }
+
+        .finding-block {
+            margin-bottom: 35px;
+            border-left: 4px solid var(--secondary);
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .finding-header {
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            display: block;
+            text-transform: capitalize;
+        }
+
+        .finding-content {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        .finding-content li {
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        /* Geometric Bullet Points */
+        .finding-content li::before {
+            content: "▪";
+            color: var(--accent);
+            font-size: 1.2rem;
+            position: absolute;
+            left: -15px;
+            top: -2px;
+        }
+
+        /* Red List Special Formatting */
+        .red-list-node {
+            background-color: #fff9f8;
+            border: 1px solid #ffe5e0;
+            border-left: 6px solid var(--accent);
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        .red-list-node strong {
+            color: var(--accent);
+        }
+
+        .sub-header {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #7f8c8d;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Key Findings</h2>
+
+    <div class="finding-block">
+        <span class="sub-header">Geography & Distribution</span>
+        <span class="finding-header">Spatial distribution and state patterns</span>
+        <ul class="finding-content">
+            <li>Ramsar sites are clustered rather than uniform, with dense corridors along the Indo‑Gangetic plains and Tamil Nadu coast, while states like Tamil Nadu and Uttar Pradesh together hold over 30% of all sites.</li>
+            <li>About half of Indian states have only one or two Ramsar sites, indicating that conservation gains depend on a few proactive state governments rather than a fully nationalised approach.</li>
+        </ul>
+    </div>
+
+    <div class="finding-block">
+        <span class="sub-header">Ecological Metrics</span>
+        <span class="finding-header">Ramsar criteria and ecological diversity</span>
+        <ul class="finding-content">
+            <li>Criterion 2 (threatened species) dominates, applied in roughly 90% of sites, while criteria for unique types (C1), fish (C7–C8), and non‑avian vertebrates (C9) are rarely used, revealing a biocentric but bird‑heavy strategy.</li>
+            <li>The diversity score shows a small set of “Irreplaceable Hubs” (e.g., Gulf of Mannar, Thane Creek, Pichavaram) that satisfy 7–9 criteria, contrasted with legacy icons like Chilika or Keoladeo that rest on only one or two criteria despite their fame and size.</li>
+        </ul>
+    </div>
+
+    <div class="finding-block">
+        <span class="sub-header">Policy Timeline</span>
+        <span class="finding-header">Temporal growth and policy inflection</span>
+        <ul class="finding-content">
+            <li>From 1981–2019, India designated only 37 sites, but between 2020–2025 added 59 more, so 61% of all sites were created in just five years.</li>
+            <li>Designations cluster in a few months (January, April, August), reflecting “policy windows” around symbolic events such as World Wetlands Day and Independence Day, when bundles of new Ramsar sites are announced.</li>
+        </ul>
+    </div>
+
+    <div class="finding-block">
+        <span class="sub-header">Scale & Region</span>
+        <span class="finding-header">Size spectrum and anchor sites (3 vs 93)</span>
+        <ul class="finding-content">
+            <li>Most Ramsar wetlands fall between 100–10,000 ha, showing a policy preference for mid‑sized, administratively manageable systems.</li>
+            <li>Only three mega‑wetlands (>100,000 ha) account for about 45% of total Ramsar area, creating a hub‑and‑spoke structure where national climate and hydrological regulation depend heavily on a tiny number of anchors.</li>
+        </ul>
+    </div>
+
+    <div class="finding-block">
+        <span class="finding-header">Latitude and regional asymmetry</span>
+        <ul class="finding-content">
+            <li>North and South India have almost equal numbers of sites (46 vs 50), but roughly 80% of total area lies south of the Tropic of Cancer, driven by peninsular mega‑basins.</li>
+            <li>Median areas north and south are similar, yet the mean area in the south is several times larger, proving that conservation architecture is statistically “pulled” by a few outsize sites.</li>
+        </ul>
+    </div>
+
+    <div class="finding-block">
+        <span class="sub-header">Ecosystem Type</span>
+        <span class="finding-header">Natural vs human‑made wetlands</span>
+        <ul class="finding-content">
+            <li>Natural and semi‑natural systems dominate the network in both number (~83 sites) and area (~88–89%), showing that India’s Ramsar strategy is still rooted in organic ecosystems.</li>
+            <li>Human‑made reservoirs and barrages are fewer (13 sites) but typically larger in median area and are increasingly important as managed habitats along irrigation and river‑regulation infrastructure.</li>
+        </ul>
+    </div>
+
+    <div class="finding-block">
+        <span class="sub-header">Landscape Connectivity</span>
+        <span class="finding-header">Fragmented vs clustered landscapes</span>
+        <ul class="finding-content">
+            <li>A small set of “ecological islands” such as Kolleru, Deepor Beel, and Loktak are hundreds of kilometres from the nearest Ramsar neighbour, making them highly vulnerable to local land‑use change.</li>
+            <li>In contrast, close pairs and clusters (e.g., Tamil Nadu bird sanctuaries, Nagi–Nakti) function as composite complexes that likely share species and hydrology, reflecting a post‑2020 move toward corridor‑style protection.</li>
+        </ul>
+    </div>
+
+    <div class="finding-block">
+        <span class="sub-header">Administrative Framework</span>
+        <span class="finding-header">Governance diversity</span>
+        <ul class="finding-content">
+            <li>State Forest and Environment Departments manage the majority of natural sites and about 60% of natural‑wetland area, forming the backbone of Ramsar implementation.</li>
+            <li>Local bodies and “other” authorities manage many mid‑sized natural sites, while only a handful of artificial sites involve academic or individual managers, indicating an under‑used space for community‑anchored governance.</li>
+        </ul>
+    </div>
+
+    <div class="red-list-node">
+        <span class="finding-header">Threats and Red List</span>
+        <ul class="finding-content">
+            <li>Threat profiles show that encroachment (urban settlements, agriculture), invasive species, and water regulation are the dominant pressures, particularly around urban and coastal sites.</li>
+            <li>Using a combined diversity score and threat‑count metric, the paper defines a <strong>Ramsar Red List</strong> of high‑diversity wetlands facing high threat density; sites like Pallikaranai Marsh, Gulf of Mannar, Nandur Madhameshwar and Beas/Asan Conservation Reserves emerge as national “crisis nodes” where nearly every major stressor overlaps.</li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

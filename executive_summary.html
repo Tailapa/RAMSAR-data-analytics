@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        :root {
+            --primary: #264653;
+            --secondary: #2A9D8F;
+            --accent: #E9C46A;
+            --text: #2d3436;
+            --line: #dfe6e9;
+        }
+
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    margin: 0;
+    padding: 10px; /* Reduced padding for a tighter fit */
+    height: auto !important; /* Forces the body to grow with text */
+    overflow: visible !important;
+    background-color: #ffffff;
+}
+
+/* Changed from 200px 1fr to a single vector */
+.master-grid {
+    display: block; /* Removes the side-by-side layout */
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+/* Hide the sidebar labels */
+.sidebar-label {
+    display: none;
+}
+
+.content-vector {
+    width: 100%;
+}
+
+h2 {
+    color: var(--primary);
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    margin-top: 0;
+    border-bottom: 2px solid var(--primary); /* Stronger geometric line */
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.exec-box {
+    background-color: #f0f7f6;
+    border-left: 8px solid var(--secondary);
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 10px 10px 0px rgba(38, 70, 83, 0.05);
+}
+
+.stat-bar {
+    display: flex;
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.stat-item {
+    flex: 1;
+    border: 1px solid var(--line);
+    padding: 10px;
+    text-align: center;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--secondary);
+}
+
+.stat-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    color: #636e72;
+}
+
+        p {
+            margin-bottom: 1.5rem;
+        }
+
+        strong {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="master-grid">
+        <div class="sidebar-label">Strategic Overview</div>
+        <div class="content-vector">
+            <h2>Executive Summary</h2>
+            <div class="exec-box">
+                India’s wetland governance from 1981 to 2025 reflects a late course‑correction after an era of under‑powered protection: the country now lists 96 Ramsar sites and aspires to meet the Kunming–Montreal GBF “30×30” target, yet this growth has not prevented critical wetlands from becoming <strong>high‑diversity, high‑threat hotspots</strong>. For much of this period, policy relied on selective designation of iconic basins without systematically tracking ecosystem diversity or accumulating pressures, so many legacy sites rest on a single Ramsar criterion even as they face escalating stress from urbanisation, land‑use change, hydrological engineering and invasive species that existing rules failed to contain. The turning point came only with the Supreme Court’s directions in <strong>M.K. Balakrishnan vs Union of India</strong> and the Wetlands Rules 2017, which forced nationwide inventory and state‑level responsibility, and with the launch of the <strong>Amrit Dharohar scheme</strong>, which seeks to mobilise finance, community stewardship and eco‑tourism around Ramsar sites. Against this backdrop of delayed but strengthening institutions, this study argues that past governance has been insufficient in design, and responds by integrating spatial growth, a Ramsar‑criteria‑based diversity score, quantified threat density from Ramsar Information Sheets, and a new <strong>Ramsar Red List</strong> of high‑diversity, high‑risk wetlands that should be treated as national environmental emergencies and prioritised for enforcement, restoration and targeted Amrit Dharohar investment.
+            </div>
+        </div>
+    </div>
+
+    <div class="master-grid" style="margin-top: 20px;">
+        <div class="sidebar-label">Contextual Analysis</div>
+        <div class="content-vector">
+            <h2>Introduction</h2>
+            <div class="intro-section">
+                <p>Historically, wetlands were often viewed as wastelands or voids in the administrative landscape. However, over the last four decades, a fundamental shift in the perception of these spaces has occurred. Wetlands are now recognized as the <strong>Kidneys of the landscape</strong>—vital hydrological vectors that regulate carbon sequestration, flood mitigation, and biodiversity. The RAMSAR Convention, signed in 1971, provided the first global framework for wetland protection. India’s accession to the convention in 1982 marked the beginning of a structured conservation timeline, transforming local water bodies into nodes of international significance.</p>
+                
+                <div class="stat-bar">
+                    <div class="stat-item"><span class="stat-value">96</span><span class="stat-label">Ramsar Sites</span></div>
+                    <div class="stat-item"><span class="stat-value">1.5M+</span><span class="stat-label">Hectares</span></div>
+                    <div class="stat-item"><span class="stat-value">30x30</span><span class="stat-label">GBF Target</span></div>
+                </div>
+
+                <p>Wetlands are no longer peripheral to India’s development agenda; they are central to its climate resilience. As of 2025, India has expanded its network to 96 RAMSAR sites (totaling over 1.5 million hectares), making it the leader in South Asia for protected wetland density. This exercise is particularly timely due to the recent announcement of <strong>Amrit Dharohar Scheme</strong> by the Government of India to promote the "wise use" of RAMSAR sites through community-led conservation and eco-tourism. Further, under the Kunming-Montreal Global Biodiversity Framework (GBF), India is committed to the "30x30" target—protecting 30% of its land and water by 2030 and this pivots wetlands as the most efficient "units" to meet these targets due to their high carbon density. Additionally, The State of World's Wetlands and India's own National Wetland Decadal Change Atlas highlights that while site numbers are increasing, they are under severe pressure from urban expansion.</p>
+
+                <p>This analysis evaluates the <strong>Spatio-Temporal Efficiency</strong> of 40 years of policy. While the number of sites has exploded recently, our research identifies anchor hubs in conservation—where 45% of the protected area is concentrated in just 3% of the sites. The rationale for this study is further bolstered by a strengthening judicial framework. Landmark rulings, such as the Supreme Court’s directions in the <strong>M.K. Balakrishnan vs. Union of India</strong> case, have mandated the mapping and protection of over 200,000 wetlands nationwide. The Wetlands (Conservation and Management) Rules, 2017, shifted the administrative authority toward States, making local-level data analysis more critical than ever.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

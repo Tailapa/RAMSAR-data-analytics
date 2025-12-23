@@ -14,7 +14,8 @@ format:
     toc-location: left
     code-fold: false
     code-tools: false
-    embed-resources: true
+    embed-resources: true  # This is crucial for offline rendering
+    self-contained: true
     fig-height: 6  
     fig-width: 6 
     fig-align: center
@@ -26,88 +27,24 @@ bibliography: references.bib
 editor_options: 
   chunk_output_type: console
 
-comments:
-  giscus:
-    repo: "Tailapa/RAMSAR-data-analytics"
-    category: "Announcements"  
-    mapping: pathname
-    reactions-enabled: true
-    input-position: top
-    theme: light
-    language: en
+#comments:
+# giscus:
+#    repo: "Tailapa/RAMSAR-data-analytics"
+#    category: "Announcements"  
+#    mapping: pathname
+#    reactions-enabled: true
+#    input-position: top
+#    theme: light
+#    language: en
 ---
 
-::: {#policy_brief .callout style="simple"}
-## **Executive Summary**
+```{=html}
+<iframe src="executive_summary.html" width="100%" height="800px" frameborder="0"></iframe>
+```
 
-India’s wetland governance from 1981 to 2025 reflects a late course‑correction after an era of under‑powered protection: the country now lists 96 Ramsar sites and aspires to meet the Kunming–Montreal GBF “30×30” target, yet this growth has not prevented critical wetlands from becoming high‑diversity, high‑threat hotspots. For much of this period, policy relied on selective designation of iconic basins without systematically tracking ecosystem diversity or accumulating pressures, so many legacy sites rest on a single Ramsar criterion even as they face escalating stress from urbanisation, land‑use change, hydrological engineering and invasive species that existing rules failed to contain. The turning point came only with the Supreme Court’s directions in *M.K. Balakrishnan vs Union of India* and the Wetlands Rules 2017, which forced nationwide inventory and state‑level responsibility, and with the launch of the Amrit Dharohar scheme, which seeks to mobilise finance, community stewardship and eco‑tourism around Ramsar sites. Against this backdrop of delayed but strengthening institutions, this study argues that past governance has been insufficient in design, and responds by integrating spatial growth, a Ramsar‑criteria‑based diversity score, quantified threat density from Ramsar Information Sheets, and a new Ramsar Red List of high‑diversity, high‑risk wetlands that should be treated as national environmental emergencies and prioritised for enforcement, restoration and targeted Amrit Dharohar investment.
-:::
-
-## Introduction
-
-Historically, wetlands were often viewed as **wastelands** or voids in the administrative landscape. However, over the last four decades, a fundamental shift in theperception of these spaces has occurred. Wetlands are now recognized as the **Kidneys** of the landscape—vital hydrological vectors that regulate carbon sequestration, flood mitigation, and biodiversity. The **RAMSAR Convention, signed in 1971**, provided the first global frmework for wetland protection. India’s accession to the convention in 1982 marked the beginning of a structured conservation timeline, transforming local water bodies into nodes of international significance.
-
-Wetlands are no longer peripheral to India’s development agenda; they are central to its climate resilience. As of 2025, India has expanded its network to **96 RAMSAR sites** (totaling over 1.5 million hectares), making it the leader in South Asia for protected wetland density. This exercise is particularly timely due to the recent announcement of **Amrit Dharohar Scheme** by the Government of India to promote the "wise use" of RAMSAR sites through community-led conservation and eco-tourism. Further, under the **Kunming-Montreal Global Biodiversity Framework (GBF)**, India is committed to the "30x30" target—protecting 30% of its land and water by 2030 and this pivots wetlands as the most efficient "units" to meet these targets due to their high carbon density. Additionally, The **State of World's Wetlands** and India's own **National Wetland Decadal Change Atlas** highlights that while site numbers are increasing, they are under severe pressure from urban expansion.
-
-This analysis evaluates the **Spatio-Temporal Efficiency** of 40 years of policy. While the number of sites has exploded recently, our research identifies anchor hubs in conservation—where 45% of the protected area is concentrated in just 3% of the sites. The rationale for this study is further bolstered by a strengthening judicial framework. Landmark rulings, such as the **Supreme Court’s directions in the *M.K. Balakrishnan vs. Union of India* case**, have mandated the mapping and protection of over 200,000 wetlands nationwide. The **Wetlands (Conservation and Management) Rules, 2017**, shifted the administrative authority toward States, making local-level data analysis more critical than ever.
-
-::: {.callout-note appearance="minimal"}
-## Key Findings
-
-**Spatial distribution and state patterns**
-
--   Ramsar sites are clustered rather than uniform, with dense corridors along the Indo‑Gangetic plains and Tamil Nadu coast, while states like Tamil Nadu and Uttar Pradesh together hold over 30% of all sites.
-
--   About half of Indian states have only one or two Ramsar sites, indicating that conservation gains depend on a few proactive state governments rather than a fully nationalised approach.
-
-**Ramsar criteria and ecological diversity**
-
--   Criterion 2 (threatened species) dominates, applied in roughly 90% of sites, while criteria for unique types (C1), fish (C7–C8), and non‑avian vertebrates (C9) are rarely used, revealing a biocentric but bird‑heavy strategy.
-
--   The diversity score shows a small set of “Irreplaceable Hubs” (e.g., Gulf of Mannar, Thane Creek, Pichavaram) that satisfy 7–9 criteria, contrasted with legacy icons like Chilika or Keoladeo that rest on only one or two criteria despite their fame and size.
-
-**Temporal growth and policy inflection**
-
--   From 1981–2019, India designated only 37 sites, but between 2020–2025 added 59 more, so 61% of all sites were created in just five years.
-
--   Designations cluster in a few months (January, April, August), reflecting “policy windows” around symbolic events such as World Wetlands Day and Independence Day, when bundles of new Ramsar sites are announced.
-
-**Size spectrum and anchor sites (3 vs 93)**
-
--   Most Ramsar wetlands fall between 100–10,000 ha, showing a policy preference for mid‑sized, administratively manageable systems.
-
--   Only three mega‑wetlands (\>100,000 ha) account for about 45% of total Ramsar area, creating a hub‑and‑spoke structure where national climate and hydrological regulation depend heavily on a tiny number of anchors.
-
-**Latitude and regional asymmetry**
-
--   North and South India have almost equal numbers of sites (46 vs 50), but roughly 80% of total area lies south of the Tropic of Cancer, driven by peninsular mega‑basins.
-
--   Median areas north and south are similar, yet the mean area in the south is several times larger, proving that conservation architecture is statistically “pulled” by a few outsize sites.
-
-**Natural vs human‑made wetlands**
-
--   Natural and semi‑natural systems dominate the network in both number (\~83 sites) and area (\~88–89%), showing that India’s Ramsar strategy is still rooted in organic ecosystems.
-
--   Human‑made reservoirs and barrages are fewer (13 sites) but typically larger in median area and are increasingly important as managed habitats along irrigation and river‑regulation infrastructure.
-
-**Fragmented vs clustered landscapes**
-
--   A small set of “ecological islands” such as Kolleru, Deepor Beel, and Loktak are hundreds of kilometres from the nearest Ramsar neighbour, making them highly vulnerable to local land‑use change.
-
--   In contrast, close pairs and clusters (e.g., Tamil Nadu bird sanctuaries, Nagi–Nakti) function as composite complexes that likely share species and hydrology, reflecting a post‑2020 move toward corridor‑style protection.
-
-**Governance diversity**
-
--   State Forest and Environment Departments manage the majority of natural sites and about 60% of natural‑wetland area, forming the backbone of Ramsar implementation.
-
--   Local bodies and “other” authorities manage many mid‑sized natural sites, while only a handful of artificial sites involve academic or individual managers, indicating an under‑used space for community‑anchored governance.
-
-**Threats and Red List**
-
--   Threat profiles show that encroachment (urban settlements, agriculture), invasive species, and water regulation are the dominant pressures, particularly around urban and coastal sites.
-
--   Using a combined diversity score and threat‑count metric, the paper defines a Ramsar Red List of high‑diversity wetlands facing high threat density; sites like Pallikaranai Marsh, Gulf of Mannar, Nandur Madhameshwar and Beas/Asan Conservation Reserves emerge as national “crisis nodes” where nearly every major stressor overlaps.
-:::
+```{=html}
+<iframe src="key_findings.html" width="100%" height="800px" frameborder="0"></iframe>
+```
 
 ## **Objective**
 
@@ -157,7 +94,6 @@ ramsar_json <- fromJSON(api_url)
 # Convert to a data frame
 # The API usually returns a nested list; we simplify it here
 ramsar_data <- as.data.frame(ramsar_json)
-
 ```
 
 ```{r}
@@ -166,7 +102,6 @@ ramsar_data <- as.data.frame(ramsar_json)
 csv_url <- "https://rsis.ramsar.org/sites/default/files/rsiswp_search/exports/ramsar-sites-tabular-20251222-192500-11d099a77a71e0b34b74eedddd54249a.csv"
 
 rsis_df <- read.csv(csv_url)
-
 ```
 
 ## Glimpse of the dataframe
@@ -536,7 +471,7 @@ There are also sites like East Calcutta Wetlands, Harike Lake, Sambhar Lake, and
 
 Few sites like Kanjli (C3 only) or Udaipur Jheel (C2, C3) possess a very simplistic profile. Unlike sites like Gulf of Mannar, which are defined by 8-9 criteria, these sites are linear. If the population of species (C2 or C3) they protect disappears, the justification for their Ramsar status would be compromised. Thus, they act as niche refuge sites rather than diverse ecological hubs.
 
-## Temporal Analysis of Criteria 
+## Temporal Analysis of Criteria
 
 ```{r}
 #| label: Time vs criteria diversity
@@ -1427,90 +1362,6 @@ knitr::kable(top_risk_sites,
              caption = "THE RED LIST: Top 10 Sites by Threat Density")
 ```
 
-We define the **"Red List" of Indian Wetlands** as those high-value sites that achieve a **Diversity Score of 5 or higher** while simultaneously facing **20 or more unique threats**. These sites represent the most ecologically significant yet vulnerable areas in the country. Based on the data, the following sites are under extreme pressure:
-
-1.  **Pallikaranai Marsh Reserve Forest (39 Threats):** This is the most stressed wetland in the current assessment. It is experiencing a total system assault, facing everything from urban sprawl and industrial pollution to sensory disturbances (light and noise) and severe climate events.
-
-2.  **Gulf of Mannar Marine Biosphere Reserve (35 Threats):** A complex marine ecosystem where heavy industrial activity, international shipping lanes, and climate change pressures converge.
-
-3.  **Nandur Madhameshwar & Longwood Shola (34 Threats):** These sites are suffering from severe fragmentation due to a high density of infrastructure, such as roads and utility lines, combined with relentless agricultural encroachment.
-
-4.  **Asan & Beas Conservation Reserves (29 Threats):** These riverine systems are primarily stressed by hydrological disruptions—including water regulation, dams, and canalization—compounded by heavy recreational and tourism use.
-
-The analysis reveals that India's Ramsar sites are not merely facing isolated environmental problems, but ompound crises. Sites like the **Pallikaranai Marsh** are navigating nearly 40 distinct threats simultaneously. As a wetland falls within an urban or industrial sphere, the number of threats does not simply increase—it multiplies. This suggests that traditional conservation methods, which focus solely on protecting the water body itself, are insufficient. To preserve these high-value areas, management must shift toward integrated mitigation strategies that address the surrounding urban and industrial infrastructure as part of the broader ecosystem.
-
-## Actionable Policy Recommendations
-
-**1. Make the Ramsar Red List a legal priority class**
-
--   Notify Red List sites as “priority wetlands” under State Rules and management plans.
-
-    -   Use your threshold (diversity score ≥5, ≥20 threats) to create a formal Priority Category, with mandatory restoration and stricter scrutiny of new projects in and around these wetlands.​
-
--   Link Red List status to Amrit Dharohar funding and pilots.
-
-    -   Require that a minimum share of Amrit Dharohar and Amrit Dharohar Capacity Building funds flow to Red List sites each year, beyond the current limited pilot set.​
-
-**2. Enforce M.K. Balakrishnan and Wetlands Rules, 2017 through data**
-
--   Complete and publish geo‑referenced inventories for all \~2,01,503 mapped wetlands, building on the Supreme Court’s directions.
-
-    -   Integrate Ramsar and non‑Ramsar wetlands into a single national geodatabase with open access for states, researchers and courts.​
-
--   Use RSIS threat fields as a compliance dashboard.
-
-    -   Mandate annual updating of threat categories for all Ramsar sites and require state governments to report how each prohibited activity under Rule 4/7 is being prevented or mitigated.​
-
-**3. Rebalance designation strategy using diversity analytics**
-
--   Set numerical targets for under‑used Ramsar criteria (C1, C7, C8, C9).
-
-    -   Direct state authorities to identify at least a specified number of new candidate sites for geophysical uniqueness, fish spawning and non‑avian vertebrates by 2030, correcting the current bird‑centric bias.​
-
--   Prioritise missing ecosystem types and regions.
-
-    -   Use your diversity and latitude/area findings to focus new designations on peatlands, desert wetlands, high‑altitude marshes and under‑represented northern riverine systems, rather than only adding more bird sanctuaries.
-
-**4. De‑risk anchor basins and urban crisis nodes**
-
--   Prepare site‑specific “Anchor Basin Resilience Plans” for Sundarbans, Chilika, Vembanad‑Kol and other mega‑sites.
-
-    -   Combine climate scenarios, upstream land‑use regulation, salinity and sediment management, and strict limits on new infrastructure, with measurable indicators tied to GBF “30×30” reporting.​
-
--   Declare Urban Ramsar sites with highest threat density (e.g., Pallikaranai, Thane Creek) as “no‑net‑loss” zones.
-
-    -   Under the 2017 Rules, prohibit any further permanent conversion and require offsets or restoration that measurably reduce the cumulative threat score over a fixed period (e.g., 5–10 years).​
-
-**5. Plan at corridor and cluster scales**
-
--   Recognise Ramsar clusters as single ecological complexes in plans and EIAs.
-
-    -   Tamil Nadu coastal clusters, Nagi–Nakti, and similar pairs should have joint management plans, with connectivity indicators (shared bird counts, groundwater linkages) tracked explicitly.​
-
--   Create buffer and stepping‑stone wetlands around ecological islands.
-
-    -   Use the distance‑to‑nearest‑neighbour analysis to prioritise new community reserves, OECMs or smaller protected wetlands around sites like Kolleru, Deepor Beel and Loktak, reducing isolation risk.
-
-**6. Embed data and transparency in every intervention**
-
--   Standardise a national “Ramsar Metrics Pack”.
-
-    -   For each site, publish annually: diversity score (criteria), threat count by category, Red‑List status, governance type, and key trends in area/land cover, leveraging remote sensing and community monitoring.​
-
--   Tie finance and tourism permissions to performance.
-
-    -   Under Amrit Dharohar’s nature‑tourism focus, make continued tourism or new facilities contingent on maintaining or improving diversity scores and reducing threat indices, rather than just visitor numbers.​
-
-**7. Strengthen local and community governance**
-
--   Mandate co‑management bodies for Red List and anchor sites.
-
-    -   Implement formal Wetland Management Committees with local communities, fisher groups, and independent scientists, as envisaged under the 2017 Rules and various guidelines.​
-
--   Invest in livelihood transitions that reduce threat density.
-
-    -   Use Amrit Dharohar’s capacity‑building components (boatman training, alternative livelihoods) explicitly to move people away from the most damaging activities identified in your threat analysis (unregulated construction, intensive agriculture, pollution).
-
-## Conclusion
-
-The evaluation concludes that India’s Ramsar policy has moved from slow, emblematic protection to rapid, criteria‑rich expansion, but that the first four decades largely failed to anticipate how urbanisation, infrastructure and climate pressures would converge on the very wetlands of highest ecological value. Going forward, the paper argues for a decisive shift from nominal designation to risk‑aware governance: rebalancing Ramsar criteria toward under‑represented ecosystem functions, de‑risking mega‑anchors, protecting clusters and corridors, and using the Ramsar Red List as a priority list for funding, enforcement, and Amrit Dharohar interventions so that India’s expanded network translates into durable ecological security rather than a larger, more fragile inventory on paper.​
+```{=html}
+<iframe src="red_list_report.html" width="100%" height="800px" frameborder="0"></iframe>
+```
