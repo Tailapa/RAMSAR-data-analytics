@@ -1343,25 +1343,37 @@ risk_value_data <- site_diversity |>
 # 3. Geometric Visualization: The Risk-to-Value Grid
 ggplot(risk_value_data, aes(x = Diversity_Score, y = Threat_Count)) +
   # Quadrant Shading
-  annotate("rect", xmin = 5, xmax = 9, ymin = 10, ymax = max(risk_value_data$Threat_Count), 
-           fill = "#E76F51", alpha = 0.2) + # The "Red List" Zone
+  annotate("rect", xmin = 5, xmax = 9, ymin = 20, ymax = max(risk_value_data$Threat_Count), 
+           fill = "red", alpha = 0.2) + # The "Red List" Zone
   # Data Nodes
   geom_point(color = "#264653", size = 3, alpha = 0.7) +
   # Labeling the High-Risk Outliers
   geom_text(data = filter(risk_value_data, Diversity_Score >= 6 & Threat_Count >= 12),
-            aes(label = Site.name), vjust = -1, size = 3, family = "mono") +
+            aes(label = Site.name), vjust = -1, size = 3) +
   # Geometric Styling
   theme_minimal() +
   labs(
-    title = "RISK-TO-VALUE MATRIX: THE RED LIST NODES",
-    subtitle = "Identifying high-complexity sites under extreme anthropogenic pressure",
-    x = "Value Vector (Diversity Score)",
-    y = "Risk Vector (Total Threat Count)"
+    title = "Ramsar Red List : Relationship between Risks and Values",
+    subtitle = "Identifying sites under extreme pressure",
+    caption = "Red List = sites with diversity score ≥5 and threat count ≥20",
+    x = "Values (Diversity Score)",
+    y = "Risks (Total Threat Count)"
   ) +
   theme(
     panel.grid.minor = element_blank(),
     plot.title = element_text(face = "bold")
   )
+
+
+top_risk_sites <- risk_value_data |>
+  arrange(desc(Threat_Count)) |>
+  head(10) |>
+  select(Site.name, Threat_Count, Diversity_Score)
+
+# Render as a clean table
+knitr::kable(top_risk_sites, 
+             col.names = c("Ramsar Site Name", "Total Threat Count", "Diversity Score"),
+             caption = "THE RED LIST: Top 10 Sites by Threat Density")
 ```
 
 ## Conclusion
