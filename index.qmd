@@ -55,9 +55,9 @@ Wetlands are no longer peripheral to India’s development agenda; they are cent
 
 This analysis evaluates the **Spatio-Temporal Efficiency** of 40 years of policy. While the number of sites has exploded recently, our research identifies anchor hubs in conservation—where 45% of the protected area is concentrated in just 3% of the sites. The rationale for this study is further bolstered by a strengthening judicial framework. Landmark rulings, such as the **Supreme Court’s directions in the *M.K. Balakrishnan vs. Union of India* case**, have mandated the mapping and protection of over 200,000 wetlands nationwide. The **Wetlands (Conservation and Management) Rules, 2017**, shifted the administrative authority toward States, making local-level data analysis more critical than ever.
 
-## **Research Objective**
+## **Objective**
 
-By analyzing the **Size Spectrum** and **Designation Timeline**, this exercise seeks to answer a critical question: *Has India’s policy evolved from protecting "Mega-Basins" to a more resilient, distributed network of "Micro-Habitats"?* Understanding this shift is essential for predicting the future trajectory of India's environmental architecture.
+The objective of this analysis is to evaluate the **Geospatial, Temporal and Institutional** architecture of India’s RAMSAR network from 1982 to 2025 to understand the dynamics of India’s conservation strategy over 40 years since the signing of RAMSAR Convention. Specifically, this study aims to discover key insights from implementation of this conservation framework to provide evidence-based policy levers to crystallize India's conservation strategy in sound environmental principles.
 
 ## Data Source
 
@@ -66,9 +66,11 @@ The foundational data for this analysis is sourced from the **Open Government Da
 ::: {.callout-note appearance="simple"}
 ## Data Accessibility
 
-The dataset for this analysis is sourced from the **Open Government Data (OGD) Platform India**.
+The dataset for this analysis is sourced from the **Open Government Data (OGD) Platform India** and RSIS portal (<https://rsis.ramsar.org/>)
 
-[Download Dataset](https://www.data.gov.in/catalog/ramsar-sites-details){.btn .btn-outline-primary .btn-sm role="button"}
+[Download OGD Dataset](https://www.data.gov.in/catalog/ramsar-sites-details){.btn .btn-outline-primary .btn-sm role="button"}
+
+[Download RSIS Dataset](https://rsis.ramsar.org/sites/default/files/rsiswp_search/exports/ramsar-sites-tabular-20251222-192500-11d099a77a71e0b34b74eedddd54249a.csv)
 :::
 
 ```{r}
@@ -85,6 +87,7 @@ library(tidytext)
 library(patchwork) # To combine plots if needed
 library(ggwordcloud)
 library(viridis)
+library(lubridate)
 
 #library(rnaturalearth) # Error in Indian map with wrong administrative boundaries
 #library(rnaturalearthdata) #
@@ -103,6 +106,15 @@ ramsar_data <- as.data.frame(ramsar_json)
 
 ```
 
+```{r}
+#| label: Reading CSV file (RSIS dataframe)
+
+csv_url <- "https://rsis.ramsar.org/sites/default/files/rsiswp_search/exports/ramsar-sites-tabular-20251222-192500-11d099a77a71e0b34b74eedddd54249a.csv"
+
+rsis_df <- read.csv(csv_url)
+
+```
+
 ## Glimpse of the dataframe
 
 ```{r}
@@ -116,7 +128,7 @@ The dataset has **`r nrow(ramsar_data)`** rows and **`r ncol(ramsar_data)`** col
 
 ## Data Cleaning and Preparation
 
-The dataset on RAMSAR wetlands downloaded from OGD is a json file (not structured), and all the observations are stored in character data type. This is not ideal for Exploratory Data Analysis (EDA), which requires a structured dataset. Hence, we need to clean the data by mutating the observations into appropriate data types that will make it easier to analyse.
+The dataset on RAMSAR wetlands downloaded from OGD is a json file (not structured), and all the observations are stored in character data type. This is not ideal for Exploratory Data Analysis (EDA), which requires a structured dataset. Hence, we need to clean the data by mutating the observations into appropriate data types that will make it easier to analyse. We use tidyverse() library for the said purpose.
 
 ```{r}
 #| label: Converting chr strings to proper data types
@@ -239,6 +251,106 @@ ggplot() +
 
 The above map illustrates that India's RAMSAR sites are not uniformly distributed but are clustered. We can see a concentration of sites in the **Indo-Gangetic Plain** and a significant concentration along the **Southern Coast (Tamil Nadu)**. The nodal points also indicate that the largest wetlands (by area) are mostly located in the North and East, while the South is characterized by a cluster of smaller sites.
 
+## The Ramsar Sites Criteria
+
+The Ramsar Convention uses nine specific criteria to identify Wetlands of International Importance. **A site must meet at least one of these criteria** to be designated as a Ramsar Site. These criteria are divided into two main groups: those based on representative, rare, or unique wetland types (**Group A**), and those focusing on conserving biological diversity (**Group B**). Here's a detailed breakdown of [criteria](https://www.ramsar.org/sites/default/files/documents/library/ramsarsites_criteria_eng.pdf) for your reference.
+
+```{r}
+#| label: criteria count
+
+# 1. Prepare the Criteria Data
+criteria_counts <- rsis_df |>
+  # Select only the criteria columns
+  select(starts_with("Criterion")) |>
+  # Pivot to long format: Column 1 = Criterion Name, Column 2 = Yes/No
+  pivot_longer(cols = everything(), names_to = "Criterion", values_to = "Status") |>
+  # Count only the "Yes" responses for each criterion
+  filter(Status == "Yes") |>
+  group_by(Criterion) |>
+  summarise(Count = n()) |>
+  # Clean up labels (e.g., "Criterion1" to "C1")
+  mutate(Criterion = str_replace(Criterion, "Criterion", "C"))
+
+# 2. Create the Lollipop Plot
+ggplot(criteria_counts, aes(x = reorder(Criterion, Count), y = Count)) +
+  # Create the vertical stem
+  geom_segment(aes(xend = Criterion, y = 0, yend = Count), color = "#999999", size = 1) +
+  # Create the data point (The Node)
+  geom_point(size = 8, color = "#2A9D8F") +
+  # Add numerical labels inside/above the points
+  geom_text(aes(label = Count), color = "white", size = 5, fontface = "bold") +
+  coord_flip() +
+  labs(
+    title = "Dominance of Ramsar Criteria",
+    subtitle = "Most Ramsar sites support ecologically threatened species",
+    x = "Ramsar Criterion",
+    y = "Number of Qualifying Sites"
+  ) +
+  theme_minimal() +
+  theme(
+    panel.grid.major.y = element_blank(),
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5)
+  )
+```
+
+The analysis of the distribution of these 9 criteria across Ramsar sites denotes the ecological fingerprint of India's Ramsar network. The analysis also helps in understanding why these sites are considered to be of international importance.
+
+The core striking feature of the analysis is the dominance of Criteria 2 (C2) as the qualifying criteria in 87/96 sites. Since C2 is associated with supporting vulnerable or endangered species, its presence in 90% of all sites implies that India uses Ramsar convention mainly to protect threatened species.
+
+The high counts for C3 (76) and C4 (62) indicates that these sites support biological diversity by providing refuge and supports vulnerbale species at a critical stage in their life cycles. C5 (44) and C6 (40) deal with waterbird populations and almost **42–45%** of India’s sites qualify under these criteria. These sites likely form part of the Central Asian Flyway acting as the primary transit points for migratory species.
+
+Interestingly, **C1** only appears in **29 sites**, which indicates that India’s designation strategy is **biocentric** rather than **geocentric**. Thus,there is a significant opportunity to identify representative wetlands such as peatlands or unique ephemeral desert wetlands that might not have high species counts but are rare geological formations.
+
+Additionally, only about **30%** of sites are recognized for their role in fish spawning or indigenous stocks (C7 and C8). Given India's massive riverine and coastal systems, this may suggest that the aquatic biodiversity is currently under-represented in the RAMSAR portfolio. Whereas, with only 1 site qualifying under C9, there is a near-total absence of sites designated specifically for mammals, reptiles, or amphibians.
+
+```{r}
+#| label: Identifying most cited species
+#| eval: false
+#| include: false
+
+# 1. Define a 'Biological Dictionary' of common wetland species
+# You can expand this list based on your specific observations
+species_keywords <- c(
+  "Crane", "Dolphin", "Goose", "Duck", "Stork", "Ibis", "Pelican", "Flamingo", 
+  "Crocodile", "Turtle", "Otter", "Mahseer", "Catfish", "Tiger", "Elephant", 
+  "Leopard", "Mangrove", "Gharial", "Eagle", "Falcon", "Heron", "Egret", 
+  "Sarus", "Black-necked", "Bar-headed", "Red-crested", "Irrawaddy", 
+  "Fishing Cat", "Smooth-coated", "Mugger", "Olive Ridley", "White-bellied",
+  "Aythya", "Sterna", "Pelecanus", "Aquila", "Gyps", "Anser", "Grus", 
+  "Neophron", "Anhinga", "Haliaeetus", "Threskiornis", "Mycteria", "Anas"
+)
+
+# 2. Extract and Count Species Mentions
+species_frequency <- rsis_df |>
+  select(Site.name, Ecosystem.services, Annotated.summary) |>
+  # Combine the two text columns into a single 'Narrative' vector
+  mutate(Full_Narrative = paste(Ecosystem.services, Annotated.summary)) |>
+  # Tokenize the narrative into individual words
+  unnest_tokens(word, Full_Narrative) |>
+  # Standardize casing for matching
+  mutate(word = str_to_title(word)) |>
+  # Match against our biological dictionary
+  filter(word %in% species_keywords) |>
+  # Count how many unique sites mention each species
+  group_by(word) |>
+  summarise(Site_Presence = n_distinct(Site.name)) |>
+  arrange(desc(Site_Presence))
+
+# 3. Geometric Visualization of Biological Presence
+ggplot(species_frequency, aes(x = reorder(word, Site_Presence), y = Site_Presence)) +
+  geom_segment(aes(xend = word, y = 0, yend = Site_Presence), color = "#264653") +
+  geom_point(size = 5, color = "#E76F51") +
+  coord_flip() +
+  theme_minimal(base_family = "mono") +
+  labs(
+    title = "NARRATIVE ANALYSIS: SPECIES MENTION FREQUENCY",
+    subtitle = "Extracted from Ecosystem Services and Annotated Summaries",
+    x = "Identified Taxa",
+    y = "Frequency Across Site Narratives"
+  )
+```
+
 ## Temporal Growth Analysis
 
 Besides the spatial analysis, the other compelling story of India’s conservation policy is Time. Here, we try to analyze the chronological sequence of designations so that we can map the conservation speed of RAMSAR sites. This temporal lens reveals whether India’s RAMSAR network grew through steady, incremental additions or through sudden bursts of policy intervention.
@@ -306,6 +418,170 @@ ggplot(ramsar_phases, aes(x = Phase, y = n, fill = Phase)) +
 ```
 
 This EDA exercise and the corresponding plot implies that, before 2020 (The Legacy Era), we only had 37 RAMSAR sites. This represents nearly 40 years of gradual identification and designation since India joined the convention in 1982. However, post-2020 (The Modern Era), we can see that 59 additional sites were designated as RAMSAR sites, which forms **61% of India’s total RAMSAR sites were declared in just the last 5 years.** This sudden surge indicates a shift in environmental priority, where the administrative speed of protecting wetlands has tripled compared to the previous four decades.
+
+## Ecological Diversity Score
+
+Our exercise identifies the high performance sites of India’s Ramsar network. While many sites qualify under just one or two criteria, a few specific sites function as ecological hotspots that validate their multi-functional roles providing a wide range of ecological services.
+
+```{r}
+#| label: Ecological (Criteria) Diversity Score
+
+# 1. Calculate Diversity Score using Native Pipe logic
+site_diversity <- rsis_df |> 
+  select(Site.name, starts_with("Criterion")) |> 
+  # Convert "Yes/No" to 1/0
+  mutate(across(starts_with("Criterion"), \(x) ifelse(x == "Yes", 1, 0))) |> 
+  # Group by each row to perform horizontal calculation
+  rowwise() |> 
+  mutate(Diversity_Score = sum(c_across(starts_with("Criterion")))) |> 
+  ungroup() |> 
+  arrange(desc(Diversity_Score))
+
+# 2. Visualize the Top 10 "Super-Nodes"
+ggplot(site_diversity |> head(10), aes(x = reorder(Site.name, Diversity_Score), y = Diversity_Score)) +
+  geom_bar(stat = "identity", fill = "#2A9D8F", width = 0.7) +
+  geom_text(aes(label = Diversity_Score), hjust = 1.5, color = "white", fontface = "bold") +
+  scale_x_discrete(labels = label_wrap(22)) +
+  coord_flip() +
+  labs(
+    title = "Most Diverse Ramsar sites",
+    subtitle = "Ranked by total number of qualifying criteria",
+    x = "Wetland Name",
+    y = "Total Criteria Met (Scale 1-9)"
+  ) +
+  theme_minimal()+
+  theme(
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5)
+  )
+```
+
+**Coastal Dominance**
+
+Sites like **Gulf of Mannar**, **Pichavaram Mangrove**, and **Thane Creek** qualify as Ramsar sites with at least 8/9 defining criterion. Their international significance is comprehensive, spanning from unique hydrology (C1) and endangered species (C2) to large-scale bird populations (C5/C6) and critical fish spawning (C7/C8). This positions them as **Irreplaceable Hubs** of India's Ramsar network. Consequently, they are highly sensitive since they meet almost every criterion. A single threat (like an oil spill or sea-level rise) wouldn't just affect one species, rather it would have a cascading impact across eight different ecological dimensions.
+
+**Niche Sites**
+
+Few sites like **Aghanashini Estuary**, **Nandur Madhameshwar**, and **Vedanthangal** score a **0 on Criterion 1** but a **1 on almost everything else**. Meaning, these sites are not necessarily geologically unique or rare wetland types in their region, but they are **biological hotspots**. They serve as crucial refugee camps for birds and fish in critical stages of their life cycles. Therefore, governing authorities here should prioritize **biological health** (species counts and habitat quality) over landscape preservation.
+
+**The Trade-off**
+
+Sites like **Kazhuveli** and **Pallikaranai** qualify for almost criteria but **fail Criterion 5** (the 20,000+ waterbird threshold). This makes them high-quality, low-density sites. They might support extremely rare species (C2) and critical life stages (C4), but they don't host the mega-flocks required for C5. These sites prove that Small/Medium sites can be more diverse than massive ones. For instance, Pallikaranai, despite its urban pressures, is more ecologically diverse (meeting 7 criteria) than many larger sites that might only meet 1 or 2 criteria.
+
+**The Minimalists**
+
+While sites like **Gulf of Mannar** dominate by ticking most of the defining criteria, alternatively, we also have sites that represent the minimalists of our Ramsar network. Surprisingly, these are some of India’s most iconic lakes like **Chilika, Keoladeo, and Wular Lake**, yet they rank at the bottom of this diversity index.
+
+To our surprise, Chilika Lake (India's largest brackish water lagoon) and Keoladeo National Park (renowned bird sanctuary) are mapped at the bottom of this diversity index with a score of only 1 (Criterion 2). By inference, these sites are protected since they act as refuges for endangered species (C2). Despite their massive area and ecological fame, their international legal standing rests on a single, critical "Life-Support" criteria. This suggests that for legacy sites, the designation was highly focused on a specific crisis (threatened species) rather than a broad-spectrum ecological mapping.
+
+**Landscape Specialists (C1)**
+
+There are also sites like East Calcutta Wetlands, Harike Lake, Sambhar Lake, and Wular Lake qualify solely under Criterion 1 (Unique/Representative Wetland). They represent the unique features since they are the only examples of their kind in the biogeographic region. Their value is not tied to the number of birds or fish they hold, but to the fact that they are unique geological or hydrological features (e.g., Sambhar as a unique saline lake, Wular as a massive freshwater tectonic lake).
+
+**Fragile Sites**
+
+Few sites like Kanjli (C3 only) or Udaipur Jheel (C2, C3) possess a very simplistic profile. Unlike sites like Gulf of Mannar, which are defined by 8-9 criteria, these sites are linear. If the population of species (C2 or C3) they protect disappears, the justification for their Ramsar status would be compromised. Thus, they act as niche refuge sites rather than diverse ecological hubs.
+
+## Temporal Analysis of Criteria 
+
+```{r}
+#| label: Time vs criteria diversity
+# 1. Prepare the Temporal Data
+temporal_complexity <- site_diversity |> 
+  # Join with the original date data
+  left_join(rsis_df |> select(Site.name, Designation.date), by = "Site.name") |> 
+  # Extract Year as a numerical vector
+  mutate(Designation_Year = year(as.Date(Designation.date))) |> 
+  filter(!is.na(Designation_Year))
+
+# 2. Calculate the Correlation Coefficient (Pearson)
+correlation_val <- cor(temporal_complexity$Designation_Year, 
+                       temporal_complexity$Diversity_Score, 
+                       method = "pearson")
+
+# 3. Geometric Visualization: The Complexity Timeline
+ggplot(temporal_complexity, aes(x = Designation_Year, y = Diversity_Score)) +
+  # Background Grid for geometric precision
+  theme_minimal() +
+  # Data Nodes
+  geom_point(alpha = 0.5, color = "#264653", size = 3) +
+  # The Regression Vector (Trend Line)
+  geom_smooth(method = "lm", color = "#E76F51", fill = "#E76F51", alpha = 0.2, se = FALSE) +
+  # Visualizing the 2020 Inflection Point
+  geom_vline(xintercept = 2020, linetype = "dashed", color = "red") +
+  annotate("text", x = 2018, y = 7.5, label = "2020 Inflection", 
+           angle = 90, size = 4, color = "#457B9D") +
+  labs(
+    title = "TIME VS. ECOLOGICAL DIVERSITY",
+    subtitle = paste0("Correlation Coefficient: ", round(correlation_val, 2)),
+    x = "Year of Designation (Temporal Vector)",
+    y = "Diversity Score (Complexity Node)"
+  ) +
+  theme(
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold", size = 14)
+  )
+
+# 1. Split the data into two temporal segments
+pre_2020_segment <- temporal_complexity |> filter(Designation_Year < 2020)
+post_2020_segment <- temporal_complexity |> filter(Designation_Year >= 2020)
+
+# 2. Calculate Sub-Vector Correlations
+cor_pre <- cor(pre_2020_segment$Designation_Year, 
+               pre_2020_segment$Diversity_Score, 
+               use = "complete.obs")
+
+cor_post <- cor(post_2020_segment$Designation_Year, 
+                post_2020_segment$Diversity_Score, 
+                use = "complete.obs")
+
+# 3. Output the results for comparison
+cat("Pre-2020 Vector Correlation:", round(cor_pre, 2), "\n")
+cat("Post-2020 Vector Correlation:", round(cor_post, 2), "\n")
+```
+
+```{r}
+#| label: tims vs criteria (faceted)
+
+# 1. Prepare Data and Define the Temporal Segments
+plot_data <- site_diversity |> 
+  left_join(rsis_df |> select(Site.name, Designation.date), by = "Site.name") |> 
+  mutate(
+    Year = year(as.Date(Designation.date)),
+    # Create the facet grouping
+    Era = if_else(Year < 2020, "LEGACY ERA (Pre-2020)", "MODERN ERA (Post-2020)")
+  ) |> 
+  filter(!is.na(Year))
+
+# 2. Generate the Faceted Geometric Visualization
+ggplot(plot_data, aes(x = Year, y = Diversity_Score)) +
+  # The 'Vector' (Regression line) for each era
+  geom_smooth(method = "lm", color = "#E76F51", fill = "#E76F51", alpha = 0.1, size = 1, se = FALSE) +
+  # The 'Nodes' (Data points)
+  geom_point(aes(color = Era), size = 3, alpha = 0.8) +
+  # Geometric facet layout
+  facet_wrap(~Era, scales = "free_x") + 
+  # Custom Vector Palette
+  scale_color_manual(values = c("LEGACY ERA (Pre-2020)" = "#264653", 
+                               "MODERN ERA (Post-2020)" = "#2A9D8F")) +
+  # Geometric Theme Styling
+  theme_minimal() +
+  labs(
+    title = "The 2020 Inflection",
+    subtitle = "Variation of Correlation Coefficient from 0.6 to -0.28",
+    x = "Year",
+    y = "No of Qualifying Criteria"
+  ) +
+  theme(
+    strip.background = element_rect(fill = "#F1FAEE", color = NA),
+    strip.text = element_text(face = "bold", color = "#1D3557", size = 11),
+    panel.spacing = unit(2, "lines"),
+    legend.position = "none",
+    plot.title = element_text(face = "bold", size = 14, hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
+    panel.grid.minor = element_blank()
+  )
+```
 
 ## State-wise Distribution of Wetlands
 
@@ -972,4 +1248,120 @@ Unlike the state departments, **Other/Local Authorities** manage **28.6%** of th
 
 On similar lines as Natural sites, with **10 sites and 9.4% of the total area,** "**State Department"** is the dominant regulatory authority for Human-Made sites. Furthermore, **Local Authority** manages only **2 Human-Made sites** representing just **1.3% of the total area.** Alternatively, we also have a new category of governing authority - **Academic/Expert** - managing a lone site in **Ankasamudra Bird Conservation Reserve in Karnataka.**
 
-### 
+## Threats faced by Wetlands
+
+```{r}
+#| label: Threat analysis
+
+# 1. Clean and Unnest the Threat Vector
+threat_analysis <- rsis_df |>
+  # Select necessary columns
+  select(Site.name, Threats) |>
+  # Drop rows with no threat data
+  filter(!is.na(Threats) & Threats != "") |>
+  # Split the comma-separated strings into individual rows
+  separate_rows(Threats, sep = ",") |>
+  # Trim whitespace for clean categorization
+  mutate(Threats = str_trim(Threats)) |>
+  # Count occurrences
+  count(Threats, sort = TRUE) |>
+  # Calculate percentage contribution
+  mutate(percentage = (n / sum(n)) * 100)
+
+# 2. Visualize the Top Threats (Geometric Style)
+ggplot(threat_analysis |> head(10), aes(x = reorder(Threats, n), y = n)) +
+  # Use thin, precise bars for a geometric look
+  geom_bar(stat = "identity", fill = "#264653", width = 0.6) +
+  # Add value labels at the end of vectors
+  geom_text(aes(label = n), hjust = -0.3, size = 3.5, color = "#264653", fontface = "bold") +
+  coord_flip(ylim = c(50, 90)) +
+  scale_x_discrete(labels = label_wrap(22)) +
+  labs(
+    title = "Top 10 Threats On Indian Wetlands",
+    subtitle = "Frequency analysis of documented risks",
+    x = "Documented Threat Category",
+    y = "Number of Sites Affected"
+  ) +
+  theme_minimal(base_family = "mono") + # Technical/Geometric font
+  theme(
+    plot.title = element_text(face = "bold", size = 16, color = "#1D3557", hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.text = element_text(size = 10, color = "#457B9D"),
+    axis.text.y = element_text(lineheight = 0.8, face = "bold"),
+    plot.margin = margin(20, 20, 20, 20)
+  )
+```
+
+The Anthropogenic Pressure Grid
+
+The threat profile for these wetlands reveals a "Density Matrix" where human expansion and resource extraction form the primary stressors. Unlike ecological diversity, which showed a structural shift in 2020, the threat data illustrates a persistent, multi-vector assault on wetland integrity.
+
+------------------------------------------------------------------------
+
+1\. The Dominance of "Spatial Encroachment" (Threats 1, 2, 9)
+
+The most significant pressure comes from the physical conversion of wetland edges into human-use zones.
+
+-   The Urban-Agri Pincer: Non-agricultural settlements (4.93%) and Agriculture (4.64%) represent the two highest frequency threats. This suggests that wetlands are being squeezed from both sides: urban sprawl and the need for food production.
+
+-   Geometric Tension: If we combine "Housing and urban areas" with "Human settlements," the urban footprint becomes the undisputed primary vector of degradation.
+
+2\. The "Biological Integrity" Decay (Threats 4, 8)
+
+Invasive species appear twice in the top 10 list (at 4.17% and 3.65%), indicating a high degree of biological "contamination."
+
+-   Systemic Fragility: The presence of invasive species and problematic genes suggests that even if the physical water remains, the Ecological Complexity (the Diversity Score we calculated earlier) is being hollowed out by non-native competitors.
+
+3\. The Hydrological Paradox (Threat 5)
+
+Water regulation (4.00%) ranks in the middle of the matrix.
+
+-   Analysis: This highlights a critical contradiction: while these are Ramsar sites (protected for their water), the very "regulation" of that water (dams, diversions, or pumping) is one of their top 5 threats. This is likely the "smoking gun" for why many legacy sites have low diversity scores—their natural pulse has been replaced by human engineering.
+
+The Tail-End Threat Analysis reveals the 'Invisible Vectors' of wetland degradation. While infrastructure and sensory pollution (light/sound) currently occupy a minimal footprint in the data, they represent the next frontier of urban wetland management. As India's 'Super-Nodes' become increasingly enveloped by metropolitan grids, these low-frequency threats will transition into primary stressors. The Policy Lever: Proactive mitigation of light and sound pollution should be 'baked-in' to the management plans of urban Ramsar sites before they trigger a decline in avian diversity scores.
+
+## Red List of Wetlands
+
+```{r}
+#| label: Red List of Wetlands
+# 1. Calculate Threat Density per Site
+# Assuming 'rsiis_df' has a 'Threats' column with comma-separated values
+threat_matrix <- rsis_df |>
+  select(Site.name, Threats) |>
+  mutate(
+    # Count threats by counting the number of separators + 1
+    Threat_Count = str_count(Threats, ",") + 1,
+    Threat_Count = replace_na(Threat_Count, 0)
+  )
+
+# 2. Merge with Diversity Scores
+risk_value_data <- site_diversity |>
+  inner_join(threat_matrix, by = "Site.name")
+
+# 3. Geometric Visualization: The Risk-to-Value Grid
+ggplot(risk_value_data, aes(x = Diversity_Score, y = Threat_Count)) +
+  # Quadrant Shading
+  annotate("rect", xmin = 5, xmax = 9, ymin = 10, ymax = max(risk_value_data$Threat_Count), 
+           fill = "#E76F51", alpha = 0.2) + # The "Red List" Zone
+  # Data Nodes
+  geom_point(color = "#264653", size = 3, alpha = 0.7) +
+  # Labeling the High-Risk Outliers
+  geom_text(data = filter(risk_value_data, Diversity_Score >= 6 & Threat_Count >= 12),
+            aes(label = Site.name), vjust = -1, size = 3, family = "mono") +
+  # Geometric Styling
+  theme_minimal() +
+  labs(
+    title = "RISK-TO-VALUE MATRIX: THE RED LIST NODES",
+    subtitle = "Identifying high-complexity sites under extreme anthropogenic pressure",
+    x = "Value Vector (Diversity Score)",
+    y = "Risk Vector (Total Threat Count)"
+  ) +
+  theme(
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold")
+  )
+```
+
+## Conclusion
