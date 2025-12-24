@@ -90,12 +90,27 @@ library(lubridate)
 #library(rnaturalearthdata) #
 
 
+
 # URL of the RAMSAR API
 api_url <- "https://indianwetlands.in/wp-content/themes/wetlands/restapi-ramsar.php"
 
+local_json <- "ramsar_df_India.php"
+
+# Geometric Resilience Logic: Check if local 'Hub' exists or fetch from 'Remote'
+if (!file.exists(local_json)) {
+  tryCatch({
+    # Mimic a browser request to avoid 403/connection errors
+    resp <- GET(api_url, user_agent("Mozilla/5.0"), timeout(30))
+    writeBin(content(resp, "raw"), local_json)
+    message("Data anchored locally from API.")
+  }, error = function(e) {
+    stop("Failed to connect to the Ecological Pulse-Node (API). Check internet or URL.")
+  })
+}
+
 # Fetch and parse the data
 # Note: Sometimes government APIs require a 'User-Agent' header to allow access
-ramsar_json <- fromJSON(api_url)
+ramsar_json <- fromJSON(local_json)
 
 # Convert to a data frame
 # The API usually returns a nested list; we simplify it here
@@ -491,6 +506,8 @@ Few sites like Kanjli (C3 only) or Udaipur Jheel (C2, C3) possess a very simplis
 
 ```{r}
 #| label: Time vs criteria diversity
+#| eval: false
+#| include: false
 # 1. Prepare the Temporal Data
 temporal_complexity <- site_diversity |> 
   # Join with the original date data
@@ -547,6 +564,8 @@ cat("Post-2020 Vector Correlation:", round(cor_post, 2), "\n")
 
 ```{r}
 #| label: tims vs criteria (faceted)
+#| eval: false
+#| include: false
 
 # 1. Prepare Data and Define the Temporal Segments
 plot_data <- site_diversity |> 
@@ -733,7 +752,7 @@ Only **3.1%** (3 sites) exceed 100,000 hectares. In a 40-year policy evaluation,
 
 With **15.6%** of sites being relatively small (\< 100 ha), there is clear evidence of **Targeted Biodiversity Conservation**. In recent years (2020–2025), policy has shifted toward identifying "Micro-Nodes," sites that may be small in area but are critical for migratory paths like the Central Asian Flyway. For example, **Kazhuveli Bird Sanctuary in Tamilnadu.**
 
-*The conservation architecture of India's RAMSAR sites indicate a shift from broad 'Landscape Protection' to 'Targeted Biodiversity Conservation.' While the early decades focused on securing massive basins (\>100k ha), the recent designations are defined by the proliferation of mid-sized (100–1,000 ha) and micro-sites (\<100 ha), emphasizing a more granular and inclusive approach to wetland management.*
+The conservation architecture of India's RAMSAR sites indicate a shift from broad 'Landscape Protection' to 'Targeted Biodiversity Conservation.' While the early decades focused on securing massive basins (\>100k ha), the recent designations are defined by the proliferation of mid-sized (100–1,000 ha) and micro-sites (\<100 ha), emphasizing a more granular and inclusive approach to wetland management.
 
 ## 3 vs 93: The Anchor Sites
 
@@ -807,7 +826,7 @@ ggplot(comparison_df, aes(x = 2, y = percentage, fill = Category)) +
 
 The most crucial finding of this EDA is the extreme concentration of protected acreage in just three locations - `r area_dist$WetlandName[1]`, `r area_dist$WetlandName[2]` and `r area_dist$WetlandName[3]` . These **3 sites** (3.1% of the total Ramsar sites) command nearly **half (44.9%)** of the entire national RAMSAR footprint. With **690,750 hectares** concentrated in these hubs, they serve as the primary Carbon sinks and hydrological regulators for the country. This anchors them as the most crucial hubs in India's RAMSAR sites conservation framework and hence these sites warrant special and focused attention. The remaining **93 sites** represent **847,207 hectares**, averaging only about 9,100 hectares per site. While these sites are individually smaller, they act as spokes of the wetland protection network since they provide vital connectivity across different climatic zones, bird flyways, and state borders.
 
-*Overall, while the Hubs provide the scale and act as national ecological anchors, the Spokes provide the resilience by ensuring that if one region faces a drought or ecological crisis, other nodes in the network can still support migratory species. This **dual-track strategy** of protecting massive hubs while expanding a dense network of small spokes is the highlight of India's modern conservation framework.*
+Overall, while the Hubs provide the scale and act as national ecological anchors, the Spokes provide the resilience by ensuring that if one region faces a drought or ecological crisis, other nodes in the network can still support migratory species. This **dual-track strategy** of protecting massive hubs while expanding a dense network of small spokes is the highlight of India's modern conservation framework.
 
 ## Relationship between Latitude & Area of Wetlands
 
@@ -877,7 +896,7 @@ As we can infer from the plot, there is a slight increase in size as we go North
 
 The fact that the Medians are so close (624 ha for north and 761 ha for south) while the Means are so far apart (6,927 vs. 24,386) proves that Indian wetland conservation architecture is anchored in a few massive sites.
 
-*Overall, while Northern India provides a consistent network of 46 sites, Peninsular India provides a relatively similar network of 50 sites but represents nearly 80% of the total protected area. Our EDA analysis reveals that conservation below ToC is defined by **massive basins**, while above ToC, it is defined by **niche clusters**.*
+Overall, while Northern India provides a consistent network of 46 sites, Peninsular India provides a relatively similar network of 50 sites but represents nearly 80% of the total protected area. Our EDA analysis reveals that conservation below ToC is defined by **massive basins**, while above ToC, it is defined by **niche clusters**.
 
 ## 
 
@@ -1316,6 +1335,8 @@ Invasive species appear twice in the top 10 list (at 4.17% and 3.65%), indicatin
 **Hydrological Paradox (Threat 5)**
 
 Though water regulation (4.00%) ranks in the middle of the matrix, it underscores a critical contradiction - while these are Ramsar sites (protected for their water), the very "regulation" of that water (dams, diversions, or pumping) is one of their top 5 threats.
+
+**Point sources of concern**
 
 Analysis of factors at the tail-end of threats points to the less visible concerns of wetland degradation. Even though infrastructure and sensory pollution (light/sound) currently occupy a minimal footprint in the data, they may represent the next big challenge of urban wetland management. As our wetlands become increasingly encroached by urban expansion, these low-level threats may transition into primary stressors in the near-future.
 
