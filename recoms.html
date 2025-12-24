@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        :root {
+            --primary: #264653;
+            --secondary: #2A9D8F;
+            --accent: #E76F51;
+            --warning: #E9C46A;
+            --bg: #ffffff;
+            --text: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg);
+        }
+        
+        
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            border-left: 2px solid var(--primary);
+            padding-left: 30px;
+        }
+
+        header {
+            border-bottom: 4px solid var(--primary);
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+        }
+
+        h1 {
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        
+         hc {
+            color: var(--bg);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .highlight-box {
+            background: #f4f4f4;
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .red-list-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .site-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .site-card:hover {
+            border-color: var(--accent);
+            background: #fffcfb;
+        }
+
+        .site-card h3 {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 1.1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .threat-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 2px 8px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .policy-section {
+            margin-top: 40px;
+        }
+
+        .policy-item {
+            margin-bottom: 25px;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 15px;
+        }
+
+        .policy-number {
+            font-weight: 800;
+            color: var(--secondary);
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+
+        .conclusion {
+            background: var(--primary);
+            color: white;
+            padding: 30px;
+            margin-top: 50px;
+            clip-path: polygon(0 0, 100% 5%, 100% 100%, 0 95%);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+  
+  <style>
+    .red-list-container {
+        margin-bottom: 40px;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .red-list-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px; /* Matching your reduced font preference */
+        background-color: #ffffff;
+    }
+    .red-list-table thead {
+        background-color: #1a5e5e;
+        color: #ffffff;
+        text-align: left;
+    }
+    .red-list-table th {
+        padding: 12px 15px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+        border-bottom: 3px solid #2e8b57; /* Geometric accent line */
+    }
+    .red-list-table td {
+        padding: 10px 15px;
+        border-bottom: 1px solid #f0f0f0;
+        color: #34495e;
+    }
+    .red-list-table tr:nth-child(even) {
+        background-color: #f9fbfb;
+    }
+    .red-list-table tr:hover {
+        background-color: #f1f4f4; /* Subtle interactive highlight */
+    }
+    .score-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        background-color: #e6f2f2;
+        color: #1a5e5e;
+        border-radius: 2px;
+        font-weight: bold;
+        font-family: monospace;
+    }
+    .threat-high {
+        color: #c0392b;
+        font-weight: bold;
+    }
+    
+    .top-heading {
+        text-align: center;
+        font-size: 24px; /* Scaled for your reduced font preference */
+        color: #1a5e5e;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        position: relative;
+        padding-bottom: 5px;
+    }
+
+    
+    
+</style>
+    <div id="policy-recommendations" class="policy-section">
+        <h2> Actionable Policy Recommendations</h2>
+        
+        <div class="policy-item">
+            <span class="policy-number">01</span> <strong>Legalise the Ramsar Red List Sites as priority wetlands</strong>
+            <ul>
+                <li>Notify Red List sites as priority wetlands under existing legal architecture like State Wetland Management Rules (2017) and State Action Plans.
+                    <p>Use metrics like diversity score and threat counts to create a formal Priority Category, with mandatory restoration and stricter scrutiny of new projects in and around these wetlands.</p>
+                </li>
+                <li>Dedicated corpus to Red List sites under <strong>Amrit Dharohar</strong> funding.
+                    <p>Set aside a share of Amrit Dharohar and Amrit Dharohar Capacity Building funds towards restoration and conservation of threatened sites.</p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="policy-item">
+            <span class="policy-number">02</span> <strong>Enforce and Update Wetlands (Conservation and Management) Rules, 2017.</strong>
+            <ul>
+                <li>Extend protection to smaller sites.
+                    <p>Expand protection to smaller wetlands and specific types like salt pans, which were omitted from the 2017 rules.</p>
+                    
+                </li>
+                <li>Use RSIS threat fields as a compliance dashboard.
+                    <p>Mandate annual updating of threat categories for all Ramsar sites and require state governments to report how each prohibited activity under Rule 4/7 is being prevented or mitigated.</p>
+                </li>
+            </ul>
+        </div>
+
+         <div class="policy-item">
+            <span class="policy-number">03</span> <strong>Rethink designation 
+            strategy to rebalance Ramsar network</strong>
+            <ul>
+                <li>Establish targets for under‑used Ramsar criteria (C1, C7, C8, C9).
+                    <p>Incentivise States to identify sites under the least-used criteria 
+                    to rebalance India's Ramsar network towards geophysical uniqueness, 
+                    fish-spawning and non-avian vertebrates too correct the 
+                    current bird-centric bias.</p>
+                </li>
+                <li>Prioritise Geocentric sites to compensate for the missing ecosystem types.
+                    <p>Agenda should be to identify new sites using our latitudinal, 
+                    and area findings to look for geophysical sites like peatlands, grasslnad wetlands, 
+                    marshes in high altitudes, and sites along riverine networks.</p>
+                </li>
+            </ul>
+        </div>
+        
+         <div class="policy-item">
+            <span class="policy-number">04</span> <strong>Safeguard mega-sites, anchor hubs and urban wetlands</strong>
+            <ul>
+                <li>Site‑specific management plans
+                    <p>Prepare localized, site‑specific management plans for mega sites like,  
+                Sundarbans by combining climate resilience, land‑use regulation, salinity and sediment management, and strict caps on new infrastructure projects aligning with SDGs.</p>
+                </li>
+                <li>Emphasize Urban Ramsar sites among Red list sites.
+                    <p>Classify the most threatened urbn Ramsar sites as protected areas, freezing further conversions, and mandating 
+                    compensatory restoration measures to reduce threats over a defined timeline.</p>
+                </li>
+            </ul>
+        </div>
+        
+         <div class="policy-item">
+            <span class="policy-number">05</span> <strong>Implement and enforce actions at cluster/corridor levels rather than at isolated nodes</strong>
+            <ul>
+                <li>Notify Ramsar clusters as ecological complexes.
+                    <p>Recognise Tamil Nadu coastal clusters, Nagi–Nakti, as Ramsar corridors in plans and EIAs with binding joint management plans, and collective monitoring of indicators.</p>
+                </li>
+                <li>Buffers around isolated sites.
+                    <p>Utilise findings based on distance‑to‑nearest‑neighbour analysis to create buffers around solitary sites to reduce isolation risks.</p>
+                </li>
+            </ul>
+        </div>
+        
+         <div class="policy-item">
+            <span class="policy-number">06</span> <strong>Intervene based on data-driven, onjective, and transparent insights</strong>
+            <ul>
+                <li>Standardise data sharing formats.
+                    <p>Mandate annual information updates in standardised formats on metrics like diversity scores, 
+                    threat counts, Red list status, and governance leveraging technology like remote sensing and Artificial Intelligence.</p>
+                </li>
+                <li>Tie finance and tourism permissions to performance.
+                    <p>Make continued tourism and fund flows contingent upon improved performance on metrics.</p>
+                </li>
+            </ul>
+        </div>
+        
+         <div class="policy-item">
+            <span class="policy-number">07</span> <strong>Emphasize local and community governance structures</strong>
+            <ul>
+                <li>Mandate co‑management bodies for Red List sites.
+                    <p>Integrate Wetland Management Committees with local communities, 
+                    fisher groups, and independent scientists, as envisaged under the 
+                    2017 Rules.</p>
+                    <p>Engage local communities through programs like Community-Based Resource Management (CBRM) 
+                    and Wetland Mitras for local stewardship.</p>
+                </li>
+                <li>Focus and invest in livelihood transitions to reverse wetland degradation.
+                    <p>Use Amrit Dharohar’s capacity‑building components (boatman training, 
+                    alternative livelihoods) to move people away from 
+                    ecosystem threatening activities (unregulated construction, intensive agriculture, pollution).</p>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="policy-item">
+            <span class="policy-number">08</span> <strong>Learning from Best Practices</strong>
+            <ul>
+                <li>Collaborate with industry leaders and pioneers
+                    <p>Adopt successful models like China's "Sponge Cities" 
+                    initiative and the Netherlands' "Room for the River" 
+                    program for integrated water and flood management.</p>
+                </li>
+            </ul>
+        </div>

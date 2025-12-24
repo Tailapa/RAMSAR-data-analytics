@@ -39,11 +39,25 @@ editor_options:
 ---
 
 ```{=html}
-<iframe src="executive_summary.html" width="100%" height="800px" frameborder="0"></iframe>
+<iframe 
+  src="executive_summary.html" 
+  width="100%" 
+  style="border:none; width:100%; height: 600px; overflow:hidden;" 
+  frameborder="0" 
+  scrolling="no">>
+  
+</iframe>
 ```
 
 ```{=html}
-<iframe src="key_findings.html" width="100%" height="800px" frameborder="0"></iframe>
+<iframe 
+  src="key_findings.html" 
+  width="100%" 
+  style="border:none; width:100%; height: 2250px; overflow:hidden;" 
+  frameborder="0" 
+  scrolling="no">>
+  
+</iframe>
 ```
 
 ## **Objective**
@@ -67,7 +81,14 @@ The dataset for this analysis is sourced from the **Open Government Data (OGD) P
 ## Method
 
 ```{=html}
-<iframe src="methods.html" width="100%" height="800px" frameborder="0"></iframe>
+<iframe 
+  src="methods.html" 
+  width="100%" 
+  style="border:none; width:100%; height: 1520px; overflow:hidden;" 
+  frameborder="0" 
+  scrolling="no">>
+  
+</iframe>
 ```
 
 ```{r}
@@ -898,8 +919,6 @@ The fact that the Medians are so close (624 ha for north and 761 ha for south) w
 
 Overall, while Northern India provides a consistent network of 46 sites, Peninsular India provides a relatively similar network of 50 sites but represents nearly 80% of the total protected area. Our EDA analysis reveals that conservation below ToC is defined by **massive basins**, while above ToC, it is defined by **niche clusters**.
 
-## 
-
 ```{r}
 #| label: Identifying ecological hubs
 #| eval: false
@@ -1400,11 +1419,72 @@ top_risk_sites <- risk_value_data |>
 ```
 
 ```{=html}
-<iframe src="red_list_report.html" width="100%" height="800px" frameborder="0"></iframe>
+<iframe 
+  src="red_list_report.html" 
+  width="100%" 
+  style="border:none; width:100%; height: 1580px; overflow:hidden;" 
+  frameborder="0" 
+  scrolling="no">
+</iframe>
 ```
 
-::: {style="display: none;"}
-## [Actionable Policy Recommendations](red_list_report.html#policy-recommendations)
+```{=html}
+<style>
+.stealth-node {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+    white-space: nowrap;
+}
+</style>
+```
 
-## [Conclusion](red_list_report.html#final-conclusion)
+::: stealth-node
+## Actionable Policy Recommendations
 :::
+
+```{=html}
+<iframe 
+    src="recoms.html" 
+    width="100%" 
+    style="border:none; width:100%; height: 2500px; overflow:hidden;" 
+    frameborder="0" 
+    scrolling="no">
+</iframe>
+```
+
+::: stealth-node
+## Conclusion {.stealth-node}
+:::
+
+```{=html}
+<iframe 
+    src="conclusion.html" 
+    width="100%" 
+    style="border:none; min-height: 85vh; width:100%;" 
+    frameborder="0" 
+    scrolling="no">
+</iframe>
+
+<script>
+  var iframe = document.getElementById('recoms-frame');
+  
+  // This function executes the "Geometric Expansion"
+  function resizeIframe() {
+    if (iframe && iframe.contentWindow.document.body) {
+      // Adding a 100px buffer ensures the "Learning from Best Practices" section is fully visible
+      var newHeight = iframe.contentWindow.document.body.scrollHeight + 100;
+      iframe.style.height = newHeight + 'px';
+    }
+  }
+
+  // Trigger resize on load and on every window change
+  iframe.onload = resizeIframe;
+  window.addEventListener('resize', resizeIframe);
+</script>
+```
