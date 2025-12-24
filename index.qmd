@@ -64,6 +64,12 @@ The dataset for this analysis is sourced from the **Open Government Data (OGD) P
 [Download RSIS Dataset](https://rsis.ramsar.org/sites/default/files/rsiswp_search/exports/ramsar-sites-tabular-20251222-192500-11d099a77a71e0b34b74eedddd54249a.csv){.btn .btn-outline-primary .btn-sm role="button"}
 :::
 
+## Method
+
+```{=html}
+<iframe src="methods.html" width="100%" height="800px" frameborder="0"></iframe>
+```
+
 ```{r}
 #| label: load the dataset
 library(tidyverse)
@@ -99,9 +105,19 @@ ramsar_data <- as.data.frame(ramsar_json)
 ```{r}
 #| label: Reading CSV file (RSIS dataframe)
 
+# Define the URL and local file path
 csv_url <- "https://rsis.ramsar.org/sites/default/files/rsiswp_search/exports/ramsar-sites-tabular-20251222-192500-11d099a77a71e0b34b74eedddd54249a.csv"
 
-rsis_df <- read.csv(csv_url)
+local_file <- "ramsar_data.csv"
+
+# Innovative "Local-First" approach
+if (!file.exists(local_file)) {
+  # Use a more modern downloader that handles HTTPS/SSL better than basic read.csv
+  download.file(csv_url, destfile = local_file, mode = "wb")
+}
+
+# Read from the local copy
+rsis_df <- read.csv(local_file)
 ```
 
 ## Glimpse of the dataframe
