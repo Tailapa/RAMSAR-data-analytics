@@ -1394,11 +1394,17 @@ top_risk_sites <- risk_value_data |>
   select(Site.name, Threat_Count, Diversity_Score)
 
 # Render as a clean table
-knitr::kable(top_risk_sites, 
-             col.names = c("Ramsar Site Name", "Total Threat Count", "Diversity Score"),
-             caption = "THE RED LIST: Top 10 Sites by Threat Density")
+#knitr::kable(top_risk_sites, 
+#             col.names = c("Ramsar Site Name", "Total Threat Count", #"Diversity Score"),
+#            caption = "THE RED LIST: Top 10 Sites by Threat Density")
 ```
 
 ```{=html}
 <iframe src="red_list_report.html" width="100%" height="800px" frameborder="0"></iframe>
 ```
+
+::: {style="display: none;"}
+## [Actionable Policy Recommendations](red_list_report.html#policy-recommendations)
+
+## [Conclusion](red_list_report.html#final-conclusion)
+:::

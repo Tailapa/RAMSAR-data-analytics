@@ -20,6 +20,8 @@
             padding: 20px;
             background-color: var(--bg);
         }
+        
+        
 
         .container {
             max-width: 900px;
@@ -129,6 +131,96 @@
     </style>
 </head>
 <body>
+  
+  <style>
+    .red-list-container {
+        margin-bottom: 40px;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .red-list-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px; /* Matching your reduced font preference */
+        background-color: #ffffff;
+    }
+    .red-list-table thead {
+        background-color: #1a5e5e;
+        color: #ffffff;
+        text-align: left;
+    }
+    .red-list-table th {
+        padding: 12px 15px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+        border-bottom: 3px solid #2e8b57; /* Geometric accent line */
+    }
+    .red-list-table td {
+        padding: 10px 15px;
+        border-bottom: 1px solid #f0f0f0;
+        color: #34495e;
+    }
+    .red-list-table tr:nth-child(even) {
+        background-color: #f9fbfb;
+    }
+    .red-list-table tr:hover {
+        background-color: #f1f4f4; /* Subtle interactive highlight */
+    }
+    .score-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        background-color: #e6f2f2;
+        color: #1a5e5e;
+        border-radius: 2px;
+        font-weight: bold;
+        font-family: monospace;
+    }
+    .threat-high {
+        color: #c0392b;
+        font-weight: bold;
+    }
+    
+    .top-heading {
+        text-align: center;
+        font-size: 24px; /* Scaled for your reduced font preference */
+        color: #1a5e5e;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        position: relative;
+        padding-bottom: 5px;
+    }
+
+    
+    
+</style>
+<h2 class="top-heading">The Ramsar Red List Sites</h2>
+<div class="red-list-container">
+    <table class="red-list-table">
+        <thead>
+            <tr>
+                <th>Ramsar Site Name</th>
+                <th>Total Threat Count</th>
+                <th>Diversity Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Pallikaranai Marsh Reserve Forest</td><td class="threat-high">39</td><td><span class="score-badge">7</span></td></tr>
+            <tr><td>Thane Creek</td><td class="threat-high">36</td><td><span class="score-badge">8</span></td></tr>
+            <tr><td>Gulf of Mannar Marine Biosphere Reserve</td><td class="threat-high">35</td><td><span class="score-badge">9</span></td></tr>
+            <tr><td>Nandur Madhameshwar</td><td class="threat-high">34</td><td><span class="score-badge">7</span></td></tr>
+            <tr><td>Longwood Shola Reserve Forest</td><td class="threat-high">34</td><td><span class="score-badge">4</span></td></tr>
+            <tr><td>Udhwa Lake Bird Sanctuary</td><td class="threat-high">31</td><td><span class="score-badge">2</span></td></tr>
+            <tr><td>Wadhvana Wetland</td><td class="threat-high">30</td><td><span class="score-badge">6</span></td></tr>
+            <tr><td>Asan Conservation Reserve</td><td class="threat-high">29</td><td><span class="score-badge">5</span></td></tr>
+            <tr><td>Tawa Reservoir</td><td class="threat-high">29</td><td><span class="score-badge">5</span></td></tr>
+            <tr><td>Beas Conservation Reserve</td><td class="threat-high">29</td><td><span class="score-badge">2</span></td></tr>
+        </tbody>
+    </table>
+</div>
 
 <div class="container">
     <header>
@@ -177,8 +269,9 @@
     ecosystem.</p>
 
 
-    <div class="policy-section">
-        <h2>Actionable Policy Recommendations</h2>
+
+    <div id="policy-recommendations", class="policy-section">
+        <h2> Actionable Policy Recommendations</h2>
         
         <div class="policy-item">
             <span class="policy-number">01</span> <strong>Legalise the Ramsar Red List Sites as priority wetlands</strong>
@@ -291,7 +384,7 @@
             </ul>
         </div>
 
-    <div class="conclusion">
+    <div id="final-conclusion", class="conclusion">
         <p><hc><strong>Conclusion</strong></hc> </p>
             <p>The evaluation concludes that India’s 
         Ramsar policy has moved from slow, emblematic protection to rapid, 
