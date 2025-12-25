@@ -16,8 +16,10 @@
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.5;
             color: var(--text);
-            margin: 0;
-            padding: 20px;
+            max-width: 900px;
+            margin: 5px;
+            padding: 5px;
+            overflow: true;
             background-color: var(--bg);
         }
         
@@ -275,3 +277,33 @@
 
 </body>
 </html>
+
+<script>
+  let lastHeight = 0;
+
+  function sendHeight() {
+    // 1. Snapshot the current width to detect horizontal changes
+    const container = document.body;
+    
+    // 2. The "Geometric Reset": Briefly hide overflow to get the true content height
+    container.style.height = 'auto';
+    
+    // 3. Measure the exact pixel height of the content vector
+    const currentHeight = document.documentElement.offsetHeight;
+
+    // 4. Update the parent only if the height has shifted significantly (>2px)
+    if (Math.abs(currentHeight - lastHeight) > 2) {
+      lastHeight = currentHeight;
+      window.parent.postMessage({ 'setHeight': currentHeight }, '*');
+    }
+  }
+
+  // Use ResizeObserver: It triggers even when text wraps or unwraps
+  const ro = new ResizeObserver(entries => {
+    sendHeight();
+  });
+  ro.observe(document.body);
+
+  // Fallback for initial load
+  window.addEventListener('load', sendHeight);
+</script>

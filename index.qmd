@@ -38,52 +38,28 @@ editor_options:
 #    language: en
 ---
 
-```{=html}
-<iframe 
-    src="executive_summary.html" 
-    id="exe_sum"
-    width="100%" 
-    style="border:none; width:100%; height: auto;" 
-    frameborder="0" 
-    scrolling="no">
-</iframe>
+## Executive Summary
 
-<script>
-  window.addEventListener('message', function(event) {
-    // Verify the message is a height update
-    if (event.data && event.data.setHeight) {
-      const iframe = document.getElementById('exe_sum');
-      if (iframe) {
-        // Apply the new vertical vector immediately
-        iframe.style.height = event.data.setHeight + 20 + 'px';
-      }
-    }
-  }, false);
-</script>
-```
+India’s wetland governance from 1981 to 2025 reflects a late course‑correction after an era of under‑powered protection: the country now lists 96 Ramsar sites and aspires to meet the Kunming–Montreal GBF “30×30” target, yet this growth has not prevented critical wetlands from becoming **high‑diversity, high‑threat hotspots**. For much of this period, policy relied on selective designation of iconic basins without systematically tracking ecosystem diversity or accumulating pressures, so many legacy sites rest on a single Ramsar criterion even as they face escalating stress from urbanisation, land‑use change, hydrological engineering and invasive species that existing rules failed to contain. The turning point came only with the Supreme Court’s directions in **M.K. Balakrishnan vs Union of India** and the Wetlands Rules 2017, which forced nationwide inventory and state‑level responsibility, and with the launch of the **Amrit Dharohar scheme**, which seeks to mobilise finance, community stewardship and eco‑tourism around Ramsar sites. Against this backdrop of delayed but strengthening institutions, this study argues that past governance has been insufficient in design, and responds by integrating spatial growth, a Ramsar‑criteria‑based diversity score, quantified threat density from Ramsar Information Sheets, and a new **Ramsar Red List** of high‑diversity, high‑risk wetlands that should be treated as national environmental emergencies and prioritised for enforcement, restoration and targeted Amrit Dharohar investment.
+
+## Introduction
+
+Historically, wetlands were often viewed as wastelands or voids in the administrative landscape. However, over the last four decades, a fundamental shift in the perception of these spaces has occurred. Wetlands are now recognized as the **Kidneys of the landscape**—vital hydrological vectors that regulate carbon sequestration, flood mitigation, and biodiversity. The RAMSAR Convention, signed in 1971, provided the first global framework for wetland protection. India’s accession to the convention in 1982 marked the beginning of a structured conservation timeline, transforming local water bodies into nodes of international significance.
+
+Wetlands are no longer peripheral to India’s development agenda; they are central to its climate resilience. As of 2025, India has expanded its network to 96 RAMSAR sites (totaling over 1.5 million hectares), making it the leader in South Asia for protected wetland density. This exercise is particularly timely due to the recent announcement of **Amrit Dharohar Scheme** by the Government of India to promote the "wise use" of RAMSAR sites through community-led conservation and eco-tourism. Further, under the Kunming-Montreal Global Biodiversity Framework (GBF), India is committed to the "30x30" target—protecting 30% of its land and water by 2030 and this pivots wetlands as the most efficient "units" to meet these targets due to their high carbon density. Additionally, The State of World's Wetlands and India's own National Wetland Decadal Change Atlas highlights that while site numbers are increasing, they are under severe pressure from urban expansion.
+
+This analysis evaluates the **Spatio-Temporal Efficiency** of 40 years of policy. While the number of sites has exploded recently, our research identifies anchor hubs in conservation—where 45% of the protected area is concentrated in just 3% of the sites. The rationale for this study is further bolstered by a strengthening judicial framework. Landmark rulings, such as the Supreme Court’s directions in the **M.K. Balakrishnan vs. Union of India** case, have mandated the mapping and protection of over 200,000 wetlands nationwide. The Wetlands (Conservation and Management) Rules, 2017, shifted the administrative authority toward States, making local-level data analysis more critical than ever.
+
+## Key Findings
 
 ```{=html}
 <iframe 
     src="key_findings.html" 
     id="key_f"
     width="100%" 
-    style="border:none; width:100%; height: auto; min-height: 200px;" 
-    frameborder="0" 
-    scrolling="no">
+    style="border:none; width:100%; height: 500px; min-height: 250px;" 
+    frameborder="0">
 </iframe>
-
-<script>
-  window.addEventListener('message', function(event) {
-    // Verify the message is a height update
-    if (event.data && event.data.setHeight) {
-      const iframe = document.getElementById('key_f');
-      if (iframe) {
-        // Apply the new vertical vector immediately
-        iframe.style.height = event.data.setHeight + 'px';
-      }
-    }
-  }, false);
-</script>
 ```
 
 ## **Objective**
@@ -107,27 +83,13 @@ The dataset for this analysis is sourced from the **Open Government Data (OGD) P
 ## Method
 
 ```{=html}
-<iframe 
+<iframe
     src="methods.html" 
-    id="meth"
+    id="met_f"
     width="100%" 
-    style="border:none; width:100%; height: auto; min-height: 200px;" 
-    frameborder="0" 
-    scrolling="no">
+    style="border:none; width:100%; height: 500px; min-height: 300px;" 
+    frameborder="0" >
 </iframe>
-
-<script>
-  window.addEventListener('message', function(event) {
-    // Verify the message is a height update
-    if (event.data && event.data.setHeight) {
-      const iframe = document.getElementById('meth');
-      if (iframe) {
-        // Apply the new vertical vector immediately
-        iframe.style.height = event.data.setHeight + 'px';
-      }
-    }
-  }, false);
-</script>
 ```
 
 ```{r}
@@ -562,7 +524,7 @@ There are also sites like East Calcutta Wetlands, Harike Lake, Sambhar Lake, and
 
 Few sites like Kanjli (C3 only) or Udaipur Jheel (C2, C3) possess a very simplistic profile. Unlike sites like Gulf of Mannar, which are defined by 8-9 criteria, these sites are linear. If the population of species (C2 or C3) they protect disappears, the justification for their Ramsar status would be compromised. Thus, they act as niche refuge sites rather than diverse ecological hubs.
 
-## Temporal Analysis of Criteria
+## 
 
 ```{r}
 #| label: Time vs criteria diversity
@@ -1459,71 +1421,94 @@ top_risk_sites <- risk_value_data |>
 
 ```{=html}
 <iframe 
-  src="red_list_report.html" 
-  width="100%" 
-  style="border:none; width:100%; height: 1580px; overflow:hidden;" 
-  frameborder="0" 
-  scrolling="no">
+    src="red_list_report.html" 
+    id="red_f"
+    width="100%" 
+    style="border:none; width:100%; height: 500px; min-height: 300px;" 
+    frameborder="0" >
 </iframe>
 ```
 
-```{=html}
-<style>
-.stealth-node {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
-    white-space: nowrap;
-}
-</style>
-```
-
-::: stealth-node
 ## Actionable Policy Recommendations
-:::
 
 ```{=html}
 <iframe 
     src="recoms.html" 
+    id="rec-f"
     width="100%" 
-    style="border:none; width:100%; height: 2500px; overflow:hidden;" 
-    frameborder="0" 
-    scrolling="no">
+    style="border:none; width:100%; height: 400px;" 
+    frameborder="0" >
 </iframe>
 ```
 
-::: stealth-node
-## Conclusion {.stealth-node}
-:::
+## Conclusion
 
 ```{=html}
-<iframe 
-    src="conclusion.html" 
-    width="100%" 
-    style="border:none; min-height: 85vh; width:100%;" 
-    frameborder="0" 
-    scrolling="no">
-</iframe>
+<style>
+        :root {
+            --primary: #1A5E5E;      /* Deep Wetland Teal */
+            --accent: #E76F51;       /* Risk Coral */
+            --surface: #F8FAFA;      /* Geometric Gray */
+            --text: #2C3E50;
+        }
 
-<script>
-  var iframe = document.getElementById('recoms-frame');
-  
-  // This function executes the "Geometric Expansion"
-  function resizeIframe() {
-    if (iframe && iframe.contentWindow.document.body) {
-      // Adding a 100px buffer ensures the "Learning from Best Practices" section is fully visible
-      var newHeight = iframe.contentWindow.document.body.scrollHeight + 100;
-      iframe.style.height = newHeight + 'px';
-    }
-  }
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-  // Trigger resize on load and on every window change
-  iframe.onload = resizeIframe;
-  window.addEventListener('resize', resizeIframe);
-</script>
+        p {
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+
+        .note-text {
+            background: var(--surface);
+            border-left: 6px solid var(--primary);
+            padding: 25px;
+            font-size: 0.95rem;
+            position: relative;
+            margin-top: 40px;
+        }
+
+      
+    </style>
+</head>
+<body>
+
+    <div id="final-conclusion" class="conclusion-container">
+        
+        
+        <p>
+            Overall, India’s 
+            Ramsar policy has moved from slow, emblematic protection to rapid, 
+            criteria‑rich expansion, but the first four decades largely failed 
+            to anticipate how urbanisation, infrastructure and climate pressures 
+            would converge on the wetlands of highest ecological value. 
+            Therefore, we argue for a decisive shift from nominal 
+            designation to risk‑aware governance: rebalancing Ramsar criteria 
+            toward under‑represented ecosystem functions, de‑risking mega‑anchors, 
+            protecting clusters and corridors, and using the Ramsar Red List as a 
+            priority list for funding, enforcement, and Amrit Dharohar interventions 
+            so that India’s expanded network translates into durable ecological 
+            security rather than a larger, more fragile inventory on paper.
+        </p>
+        
+        <div class="note-text">
+            <p><strong>NOTE: </strong>This framework is designed as a data‑driven tool that can be updated 
+            each year as new Ramsar sites are designated, criteria are revised, or 
+            additional threats are reported, ensuring that India’s wetland policy 
+            remains responsive to a changing ecological and institutional landscape.
+            </p>
+        </div>
+
+        <div class="vector-line"></div>
+    </div>
+
+</body>
 ```
