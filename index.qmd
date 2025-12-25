@@ -40,29 +40,55 @@ editor_options:
 
 ```{=html}
 <iframe 
-  src="executive_summary.html" 
-  width="100%" 
-  style="border:none; width:100%; height: 600px; overflow:hidden;" 
-  frameborder="0" 
-  scrolling="no">>
-  
+    src="executive_summary.html" 
+    id="exe_sum"
+    width="100%" 
+    style="border:none; width:100%; height: auto;" 
+    frameborder="0" 
+    scrolling="no">
 </iframe>
+
+<script>
+  window.addEventListener('message', function(event) {
+    // Verify the message is a height update
+    if (event.data && event.data.setHeight) {
+      const iframe = document.getElementById('exe_sum');
+      if (iframe) {
+        // Apply the new vertical vector immediately
+        iframe.style.height = event.data.setHeight + 20 + 'px';
+      }
+    }
+  }, false);
+</script>
 ```
 
 ```{=html}
 <iframe 
-  src="key_findings.html" 
-  width="100%" 
-  style="border:none; width:100%; height: 2250px; overflow:hidden;" 
-  frameborder="0" 
-  scrolling="no">>
-  
+    src="key_findings.html" 
+    id="key_f"
+    width="100%" 
+    style="border:none; width:100%; height: auto; min-height: 200px;" 
+    frameborder="0" 
+    scrolling="no">
 </iframe>
+
+<script>
+  window.addEventListener('message', function(event) {
+    // Verify the message is a height update
+    if (event.data && event.data.setHeight) {
+      const iframe = document.getElementById('key_f');
+      if (iframe) {
+        // Apply the new vertical vector immediately
+        iframe.style.height = event.data.setHeight + 'px';
+      }
+    }
+  }, false);
+</script>
 ```
 
 ## **Objective**
 
-The objective of this analysis is to evaluate the **geospatial, temporal, ecological and institutional** architecture of India’s Ramsar network from 1982 to 2025, by jointly examining site distribution, ecosystem diversity, and governance patterns. Specifically, the study aims to (i) quantify ecological diversity using Ramsar criteria, (ii) map and categorise the spectrum of anthropogenic and climatic threats reported across sites, and (iii) develops a data‑driven “Ramsar Red List” of high‑diversity wetlands facing high threat density, in order to derive evidence‑based policy levers for prioritised conservation and risk mitigation.\
+The objective of this analysis is to evaluate the **geospatial, temporal, ecological and institutional** architecture of India’s Ramsar network from 1982 to 2025, by jointly examining site distribution, ecosystem diversity, and governance patterns. Specifically, the study aims to (i) quantify ecological diversity using Ramsar criteria, (ii) map and categorise the spectrum of anthropogenic and climatic threats reported across sites, and (iii) develop a data‑driven “Ramsar Red List” of ecologically rich wetlands facing high threat density, in order to derive evidence‑based policy levers for prioritised conservation and risk mitigation.\
 
 ## Data Source
 
@@ -82,13 +108,26 @@ The dataset for this analysis is sourced from the **Open Government Data (OGD) P
 
 ```{=html}
 <iframe 
-  src="methods.html" 
-  width="100%" 
-  style="border:none; width:100%; height: 1520px; overflow:hidden;" 
-  frameborder="0" 
-  scrolling="no">>
-  
+    src="methods.html" 
+    id="meth"
+    width="100%" 
+    style="border:none; width:100%; height: auto; min-height: 200px;" 
+    frameborder="0" 
+    scrolling="no">
 </iframe>
+
+<script>
+  window.addEventListener('message', function(event) {
+    // Verify the message is a height update
+    if (event.data && event.data.setHeight) {
+      const iframe = document.getElementById('meth');
+      if (iframe) {
+        // Apply the new vertical vector immediately
+        iframe.style.height = event.data.setHeight + 'px';
+      }
+    }
+  }, false);
+</script>
 ```
 
 ```{r}
