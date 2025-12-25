@@ -62,7 +62,7 @@ This analysis evaluates the **Spatio-Temporal Efficiency** of 40 years of policy
 </iframe>
 ```
 
-## **Objective**
+## Objective
 
 The objective of this analysis is to evaluate the **geospatial, temporal, ecological and institutional** architecture of India’s Ramsar network from 1982 to 2025, by jointly examining site distribution, ecosystem diversity, and governance patterns. Specifically, the study aims to (i) quantify ecological diversity using Ramsar criteria, (ii) map and categorise the spectrum of anthropogenic and climatic threats reported across sites, and (iii) develop a data‑driven “Ramsar Red List” of ecologically rich wetlands facing high threat density, in order to derive evidence‑based policy levers for prioritised conservation and risk mitigation.\
 
